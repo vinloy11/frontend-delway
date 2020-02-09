@@ -1,11 +1,14 @@
 <template>
-  $END$
+  <header class="grid">
+      <section class="grid-row">
+        <div data-column="3">q</div>
+        <div data-column="6">q</div>
+        <div data-column="3"></div>
+      </section>
+  </header>
 </template>
 
 <script>
-  export default {
-    name: "Header"
-  }
 </script>
 
 <style scoped>

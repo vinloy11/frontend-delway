@@ -1,17 +1,12 @@
 <template>
-  <div>ПРивет</div>
+  <div>kek</div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 
-export default {
-  components: {
-    Logo
-  }
-}
+
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>
