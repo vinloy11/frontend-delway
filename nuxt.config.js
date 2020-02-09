@@ -41,7 +41,8 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/svg'
   ],
   /*
   ** Axios module configuration
@@ -51,31 +52,13 @@ export default {
   /*
   ** Build configuration
   */
+  svgSprite: {
+    // manipulate module options
+  },
   build: {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
-      const svgRule = config.module.rules.find(rule => rule.test.test('.svg'));
-
-      svgRule.test = /\.(png|jpe?g|gif|webp)$/;
-
-      config.module.rules.push({
-        test: /\.svg$/,
-        use: [
-          'babel-loader',
-          {
-            loader: 'vue-svg-loader',
-            options: {
-              svgo: {
-                plugins: [
-                  { prefixIds: true },
-                ],
-              },
-            },
-          },
-        ],
-      });
-    }
+    extend(config, ctx) {}
   }
 }

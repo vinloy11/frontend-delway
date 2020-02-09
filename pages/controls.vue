@@ -10,33 +10,51 @@
         <button class="btn danger"><span>Kek</span></button>
         <button class="btn danger disabled"><span>Kek</span></button>
       </div>
-      <div data-column="8">
-        <!--        <dw-checkbox/>-->
-        <dw-checkbox :class="allCheckedClass" :label="'all'" :id="'allCheck'" v-model="allCheckedValue"/>
-        <dw-checkbox v-for="checkbox in checkboxes"
+      <div data-column="4">
+        <dw-checkbox v-for="checkbox of checkboxes"
+                     :value="checkbox.name"
                      :key="checkbox.id"
-                     :id="checkbox.id"
+                     :label="checkbox.name"
+                     :model-value="checkboxes"
                      v-model="test"
-                     :value="checkbox"
-                     :label="checkbox.name"/>
-        <dw-checkbox id="'kek'" :label="'Kek'" v-model="testOne"/>
-        {{ testOne }} / {{ test }}
-        <test-svg/>
-        <img :src="externalSVG" alt="">
+        />
+        <dw-checkbox :model-value="false"  v-model="testOne"/>
+      </div>
+      <div data-column="4">
+        <dw-radio v-for="radio of checkboxes"
+                  :key="radio.id"
+                  :value="radio.name"
+                  :label="radio.name"
+                  v-model="modelRadio"
+                  :model-value="checkboxes"
+        />
+      </div>
+    </div>
+    <div class="grid-row">
+      <div data-column="12" style="display: flex">
+        <dw-switch  v-model="switch1"/>
+        <dw-switch  v-model="switch2"/>
+        <dw-switch  v-model="switch1"/>
+        <dw-switch  v-model="switch2"/>
+        <dw-switch  v-model="switch1"/>
+        <dw-switch  v-model="switch2"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import DwSwitch from "../components/controls/DwSwitch";
   import DwCheckbox from "../components/controls/DwCheckbox";
-  import TestSvg from '~/assets/svg/icons.svg';
-  import ExternalSVG from '~/assets/svg/icons.svg';
-
+  import DwRadio from "../components/controls/DwRadio";
+  import TestSvg from '~/assets/svg/test.svg?inline';
   export default {
-    components: { DwCheckbox, TestSvg},
+    components: { DwCheckbox, TestSvg, DwRadio, DwSwitch},
     data() {
       return {
+        switch1: true,
+        switch2: false,
+        modelRadio: '',
         allCheck: false,
         test: [],
         testOne: false,
@@ -49,33 +67,7 @@
       }
     },
     watch: {},
-    computed: {
-      externalSVG() {
-        return ExternalSVG;
-      },
-      allCheckedClass: {
-        get() {
-          return this.test.length === this.checkboxes.length ? 'all'
-            : (this.test.length !== 0 ? 'indeterminate' : 'empty')
-        },
-      },
-      allCheckedValue: {
-        set() {
-          if (!this.allCheckedValue) {
-            this.test = [];
-            this.checkboxes.forEach(checkbox => {
-              this.test.push(checkbox)
-            });
-            return;
-          }
-          this.test = [];
-        },
-        get() {
-          return this.test.length === this.checkboxes.length
-            ? this.allCheck = true : this.allCheck = false
-        },
-      }
-    }
+    computed: {}
   }
 </script>
 
