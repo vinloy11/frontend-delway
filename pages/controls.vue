@@ -18,6 +18,7 @@
                      :model-value="checkboxes"
                      v-model="test"
         />
+        {{ test }}
         <dw-checkbox :model-value="false"  v-model="testOne"/>
       </div>
       <div data-column="4">
@@ -25,10 +26,12 @@
                   :key="radio.id"
                   :value="radio.name"
                   :label="radio.name"
+                  :true-value="true"
+                  :false-value="false"
                   v-model="modelRadio"
                   :model-value="checkboxes"
         />
-      </div>
+              </div>
     </div>
     <div class="grid-row">
       <div data-column="12" style="display: flex">
@@ -56,7 +59,7 @@
         switch2: false,
         modelRadio: '',
         allCheck: false,
-        test: [],
+        test: ['kek'],
         testOne: false,
         checkboxes: [
           { name: 'Tom', age: 22, id: 2 },

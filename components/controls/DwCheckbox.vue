@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="checkbox" :id="finalId" :checked="shouldBeChecked" :value="value" @change="updateInput">
+    <input type="checkbox" :id="finalId" v-model="isChecked" :value="value">
     <label :for="finalId">{{ label }}</label>
   </div>
 </template>
@@ -34,6 +34,7 @@
     data: () => {
       return {
         finalId: null,
+        isChecked: false
       }
     },
     mounted() {
@@ -48,14 +49,12 @@
         return this.modelValue === this.trueValue
       }
     },
-    methods: {
-      updateInput(event) {
-        let isChecked = event.target.checked;
-
+    watch: {
+      isChecked: function (value) {
         if (this.modelValue instanceof Array) {
           let newValue = [...this.modelValue];
 
-          if (isChecked) {
+          if (value) {
             newValue.push(this.value)
           } else {
             newValue.splice(newValue.indexOf(this.value), 1)
@@ -63,7 +62,7 @@
 
           this.$emit('change', newValue)
         } else {
-          this.$emit('change', isChecked ? this.trueValue : this.falseValue)
+          this.$emit('change', value ? this.trueValue : this.falseValue)
         }
       }
     }
