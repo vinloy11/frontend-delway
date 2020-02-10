@@ -33,7 +33,7 @@ html {
 
   body {
     margin: 0 auto;
-    background-color: var(--green);
+    background-color: var(--white);
   }
 
   .grid .grid-row {
@@ -124,10 +124,6 @@ html {
   .grid [data-column="12"] {
     flex-grow: 12;
     flex-basis: 1040px;
-  }
-
-  .grid [data-column] {
-    background-color: tomato;
   }
 
   .left-margin-s {
@@ -285,11 +281,27 @@ html {
 }
 
 .page-enter-active, .page-leave-active {
-  transition: opacity 400ms;
+  transition: opacity 250ms;
 }
 
 .page-enter, .page-leave-active {
   opacity: 0;
+}
+
+.content-center {
+  justify-content: center;
+}
+
+.content-end {
+  justify-content: flex-end;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 
