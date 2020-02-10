@@ -1,25 +1,16 @@
 <template>
-  <label>
-    <input type="radio" :checked="shouldBeChecked"
+  <div>
+    <input type="radio"
+           :checked="shouldBeChecked"
            :value="value"
-           @change="updateInput">
-    <template v-if="shouldBeChecked">
-      <dw-on />
-    </template>
-    <template v-else>
-      <dw-off />
-    </template>
-    {{ label }}
-  </label>
+           @change="updateInput"
+           :id="finalId"
+    >
+    <label :for="finalId">{{ label }}</label>
+  </div>
 </template>
 <script>
-  import DwOn from '~/assets/svg/on.svg?inline';
-  import DwOff from '~/assets/svg/off.svg?inline';
-
   export default {
-    components: {
-      DwOff, DwOn
-    },
     model: {
       prop: 'modelValue',
       event: 'change'
@@ -35,6 +26,17 @@
         type: String,
         required: false
       },
+      id: {
+        required: false
+      }
+    },
+    data: () => {
+      return {
+        finalId: null,
+      }
+    },
+    mounted() {
+      return this.id ? this.finalId = this.id : this.finalId = Math.random();
     },
     computed: {
       shouldBeChecked() {
@@ -50,15 +52,28 @@
 </script>
 
 <style lang="scss" scoped>
-  label {
-    font-size: 0.9rem;
-    cursor: pointer;
-    color: var(--black);
+  div {
     input {
       display: none;
     }
-    svg {
-      vertical-align: bottom;
+
+    label {
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--black);
+      position: relative;
+      padding-left: 28px;
+      &:before {
+        left: 0;
+        width: 20px;
+        height: 20px;
+        content: '';
+        position: absolute;
+        background: url(~assets/svg/off.svg);
+      }
+    }
+    input:checked + label:before {
+      background: url(~assets/svg/on.svg);
     }
   }
 </style>

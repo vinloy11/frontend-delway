@@ -1,22 +1,11 @@
 <template>
-  <label>
-    <input type="checkbox" :checked="shouldBeChecked" :value="value" @change="updateInput">
-    <template v-if="shouldBeChecked">
-      <dw-checked/>
-    </template>
-    <template v-else>
-      <dw-unchecked/>
-    </template>
-    {{ label }}
-  </label>
+  <div>
+    <input type="checkbox" :id="finalId" :checked="shouldBeChecked" :value="value" @change="updateInput">
+    <label :for="finalId">{{ label }}</label>
+  </div>
 </template>
 <script type="text/javascript">
-  import DwChecked from '~/assets/svg/checked.svg?inline';
-  import DwUnchecked from '~/assets/svg/unchecked.svg?inline';
   export default {
-    components: {
-      DwChecked, DwUnchecked
-    },
     model: {
       prop: 'modelValue',
       event: 'change'
@@ -37,7 +26,18 @@
       },
       falseValue: {
         default: false
+      },
+      id: {
+        required: false
       }
+    },
+    data: () => {
+      return {
+        finalId: null,
+      }
+    },
+    mounted() {
+      return this.id ? this.finalId = this.id : this.finalId = Math.random();
     },
     computed: {
       shouldBeChecked() {
@@ -72,15 +72,28 @@
 
 
 <style lang="scss" scoped>
-  label {
-    font-size: 0.9rem;
-    cursor: pointer;
-    color: var(--black);
+  div {
     input {
       display: none;
     }
-    svg {
-      vertical-align: bottom;
+
+    label {
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--black);
+      position: relative;
+      padding-left: 28px;
+      &:before {
+        left: 0;
+        width: 20px;
+        height: 20px;
+        content: '';
+        position: absolute;
+        background: url(~assets/svg/unchecked.svg);
+      }
+    }
+    input:checked + label:before {
+      background: url(~assets/svg/checked.svg);
     }
   }
 </style>
