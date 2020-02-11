@@ -42,13 +42,42 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/svg'
+    '@nuxtjs/svg',
+    '@nuxtjs/auth'
   ],
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/login',
+            method: 'post',
+            propertyName: 'token'
+          },
+          logout: {
+            url: '/auth/logout',
+            method: 'post'
+          },
+          user: {
+            url: '/auth/profile',
+            method: 'get',
+            propertyName: false
+          }
+        },
+        // tokenRequired: true,
+        tokenType: 'Bearer'
+      }
+    }
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
-  axios: {},
+  axios: {
+    baseURL: 'http://demo-rmcsapi.zimalab.com/api/',
+    credentials: true
+  },
   /*
   ** Build configuration
   */
