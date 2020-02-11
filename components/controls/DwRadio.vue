@@ -32,7 +32,7 @@
     },
     data: () => {
       return {
-        finalId: null,
+        finalId: null
       }
     },
     mounted() {

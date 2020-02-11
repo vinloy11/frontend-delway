@@ -40,15 +40,6 @@
     mounted() {
       return this.id ? this.finalId = this.id : this.finalId = Math.random();
     },
-    computed: {
-      shouldBeChecked() {
-        if (this.modelValue instanceof Array
-        ) {
-          return this.modelValue.includes(this.value)
-        }
-        return this.modelValue === this.trueValue
-      }
-    },
     watch: {
       isChecked: function (value) {
         if (this.modelValue instanceof Array) {
@@ -59,7 +50,6 @@
           } else {
             newValue.splice(newValue.indexOf(this.value), 1)
           }
-
           this.$emit('change', newValue)
         } else {
           this.$emit('change', value ? this.trueValue : this.falseValue)
