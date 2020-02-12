@@ -7,13 +7,21 @@
         </nuxt-link>
       </div>
       <div data-column="6" class="flex content-end right-padding-m align-items-center">
-        <template v-if="isAuth && user">
-          <nuxt-link to="create" class="btn right-margin-m">Создать проект <span class="left-margin-s plus">&#43;</span></nuxt-link>
+        <template v-if="!$auth.loggedIn">
+          <nuxt-link to="create" class="btn right-margin-m">Создать проект <span class="left-margin-s plus">&#43;</span>
+          </nuxt-link>
           <div class="notify pointer right-margin">
             <dw-notify />
             <span>{{notifyCount}}</span>
           </div>
-          <img class="pointer" width="48px" height="48px" :src="user.photo ? user.photo : lol" alt="">
+          <img class="pointer" width="48px" height="48px" :src=" lol" alt="">
+        </template>
+        <template v-else>
+          <form @submit.prevent="submitForm(userInfo)">
+            <input type="text" v-model="userInfo.login" value="delayed">
+            <input type="text" v-model="userInfo.password" value="qwertY1$">
+            <button >Login</button>
+          </form>
         </template>
       </div>
     </section>
@@ -27,8 +35,11 @@
 
   export default {
     async mounted() {
-      this.isAuth = await this.$store.getters['auth/isAuthenticated'];
+      this.isAuth = await this.$store.getters['authUser/isAuthenticated'];
       this.user = await this.$store.dispatch('user/fetchUser');
+      const strategyKek = await this.$auth.strategy;
+      console.log(strategyKek);
+      this.isAuth = await this.$store.getters['auth/isAuthenticated'];
       this.notifyCount = await this.$store
         .getters['notification/notifyCount'];
     },
@@ -39,8 +50,23 @@
       return {
         lol: DwAvatar,
         isAuth: null,
+        notifyCount: '',
         user: null,
-        notifyCount: ''
+        userInfo: {
+          login: 'delayed',
+          password: 'qwertY1$',
+        }
+      }
+    },
+    methods: {
+      submitForm(user) {
+          this.$auth.loginWith('local', {
+            data: user
+          })
+        console.log(user)
+      },
+      async logout() {
+        await this.$auth.logout()
       }
     }
   }
@@ -51,6 +77,7 @@
     .logo {
       margin: 2rem 1.5rem;
     }
+
     .plus {
       display: inline-block;
       max-height: 1rem;

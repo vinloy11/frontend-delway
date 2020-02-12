@@ -1,6 +1,6 @@
 export const state = () => ({
   token: true
-})
+});
 
 export const mutations = {
   setToken(state, token) {
@@ -9,17 +9,17 @@ export const mutations = {
   clearToken(state) {
     state.token = null
   }
-}
+};
 
 export const actions = {
   async login({commit, dispatch}, formData) {
     try {
       const token = await new Promise((resolve, reject) => {
         setTimeout(() => resolve('mock-token'), 2000)
-      })
+      });
       dispatch('setToken', token)
     } catch (e) {
-      commit('setError', e, {root: true})
+      commit('setError', e, {root: true});
       throw e
     }
   },
@@ -36,8 +36,8 @@ export const actions = {
   logout({commit}) {
     commit('clearToken')
   }
-}
+};
 
 export const getters = {
   isAuthenticated: state => Boolean(state.token)
-}
+};
