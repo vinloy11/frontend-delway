@@ -7,7 +7,7 @@
         </nuxt-link>
       </div>
       <div data-column="6" class="flex content-end right-padding-m align-items-center">
-        <template v-if="!$auth.loggedIn">
+        <template v-if="$auth.loggedIn">
           <nuxt-link to="create" class="btn right-margin-m">Создать проект <span class="left-margin-s plus">&#43;</span>
           </nuxt-link>
           <div class="notify pointer right-margin">
@@ -36,12 +36,11 @@
   export default {
     async mounted() {
       this.isAuth = await this.$store.getters['authUser/isAuthenticated'];
-      this.user = await this.$store.dispatch('user/fetchUser');
       const strategyKek = await this.$auth.strategy;
       console.log(strategyKek);
-      this.isAuth = await this.$store.getters['auth/isAuthenticated'];
       this.notifyCount = await this.$store
         .getters['notification/notifyCount'];
+      this.user = await this.$store.dispatch('user/fetchUser');
     },
     components: {
       DwLogo, DwAvatar, DwNotify
@@ -50,8 +49,8 @@
       return {
         lol: DwAvatar,
         isAuth: null,
-        notifyCount: '',
         user: null,
+        notifyCount: null,
         userInfo: {
           login: 'delayed',
           password: 'qwertY1$',
@@ -62,7 +61,7 @@
       submitForm(user) {
           this.$auth.loginWith('local', {
             data: user
-          })
+          });
         console.log(user)
       },
       async logout() {
