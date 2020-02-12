@@ -32,6 +32,7 @@
   import DwLogo from '~/assets/svg/logo.svg?inline';
   import DwAvatar from '~/assets/svg/user/user.svg?raw';
   import DwNotify from '~/assets/svg/user/notify.svg?inline';
+  import axios from "axios";
 
   export default {
     async mounted() {
