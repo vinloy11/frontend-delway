@@ -1,15 +1,15 @@
 <template>
   <div>
-    {{ name }}
+    <fetch-comp :name="name" />
   </div>
 </template>
 
 <script>
-  import axios from "axios";
-
+  import FetchComp from "../components/controls/FetchComp";
   export default {
-    asyncData() {
-      return axios.get('https://api.myjson.com/bins/v9uzo')
+    components: {FetchComp},
+    asyncData({$axios}) {
+      return $axios.get('https://api.myjson.com/bins/v9uzo')
         .then(res => res.data)
     },
   }

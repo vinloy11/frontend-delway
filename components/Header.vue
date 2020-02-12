@@ -7,7 +7,7 @@
         </nuxt-link>
       </div>
       <div data-column="6" class="flex content-end right-padding-m align-items-center">
-        <template v-if="$auth.loggedIn">
+        <template v-if="!$auth.loggedIn">
           <nuxt-link to="create" class="btn right-margin-m">Создать проект <span class="left-margin-s plus">&#43;</span>
           </nuxt-link>
           <div class="notify pointer right-margin">
@@ -32,7 +32,6 @@
   import DwLogo from '~/assets/svg/logo.svg?inline';
   import DwAvatar from '~/assets/svg/user/user.svg?raw';
   import DwNotify from '~/assets/svg/user/notify.svg?inline';
-  import axios from "axios";
 
   export default {
     async mounted() {
