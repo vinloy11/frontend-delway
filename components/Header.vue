@@ -7,21 +7,13 @@
         </nuxt-link>
       </div>
       <div data-column="6" class="flex content-end right-padding-m align-items-center">
-        <template v-if="!$auth.loggedIn">
-          <nuxt-link to="create" class="btn right-margin-m">Создать проект <span class="left-margin-s plus">&#43;</span>
-          </nuxt-link>
-          <div class="notify pointer right-margin">
-            <dw-notify />
-            <span>{{notifyCount}}</span>
-          </div>
-          <img class="pointer" width="48px" height="48px" :src=" lol" alt="">
+        <dw-create-project/>
+        <template v-if="$auth.loggedIn">
+          <dw-user-inf/>
         </template>
         <template v-else>
-          <form @submit.prevent="submitForm(userInfo)">
-            <input type="text" v-model="userInfo.login" value="delayed">
-            <input type="text" v-model="userInfo.password" value="qwertY1$">
-            <button >Login</button>
-          </form>
+          <dw-auth-button :type="'sign-in'"/>
+          <dw-auth-button :type="'sign-up'"/>
         </template>
       </div>
     </section>
@@ -30,24 +22,22 @@
 
 <script>
   import DwLogo from '~/assets/svg/logo.svg?inline';
-  import DwAvatar from '~/assets/svg/user/user.svg?raw';
-  import DwNotify from '~/assets/svg/user/notify.svg?inline';
+  import DwCreateProject from "./header/DwCreateProject";
+  import DwAuthButton from "./header/DwAuthButton";
+  import DwUserInf from "./header/DwUserInf";
 
   export default {
     async mounted() {
       this.isAuth = await this.$store.getters['authUser/isAuthenticated'];
       const strategyKek = await this.$auth.strategy;
       console.log(strategyKek);
-      this.notifyCount = await this.$store
-        .getters['notification/notifyCount'];
       this.user = await this.$store.dispatch('user/fetchUser');
     },
     components: {
-      DwLogo, DwAvatar, DwNotify
+      DwLogo, DwCreateProject, DwAuthButton, DwUserInf
     },
     data: () => {
       return {
-        lol: DwAvatar,
         isAuth: null,
         user: null,
         notifyCount: null,
@@ -59,9 +49,9 @@
     },
     methods: {
       submitForm(user) {
-          this.$auth.loginWith('local', {
-            data: user
-          });
+        this.$auth.loginWith('local', {
+          data: user
+        });
         console.log(user)
       },
       async logout() {
@@ -75,35 +65,6 @@
   header {
     .logo {
       margin: 2rem 1.5rem;
-    }
-
-    .plus {
-      display: inline-block;
-      max-height: 1rem;
-      vertical-align: middle;
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    .notify {
-      position: relative;
-      span {
-        position: absolute;
-        right: -3px;
-        top: 0;
-        font-weight: 600;
-        color: var(--white);
-        max-width: 1rem;
-        width: 1rem;
-        max-height: 0.6rem;
-        height: 0.6rem;
-        font-size: 0.6rem;
-        line-height: 0.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: var(--light-red);
-        border-radius: 1rem;
-      }
     }
   }
 </style>
