@@ -5,9 +5,13 @@
 
 <script>
     export default {
+
     }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  .plus {
+    vertical-align: middle;
+    font-size: 15px;
+  }
 </style>

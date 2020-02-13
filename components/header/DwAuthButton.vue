@@ -1,5 +1,7 @@
 <template>
-  <button :class="['btn', isSinIn ? 'sign-in default' : 'sign-up']"><span v-html="isSinIn ? 'Войти' : 'Зарегестрироваться'"/></button>
+  <button @click="authInit()" :class="['btn', isSignIn ? 'sign-in default' : 'sign-up']">
+    <span v-html="isSignIn ? 'Войти' : 'Зарегестрироваться'"/>
+  </button>
 </template>
 
 <script>
@@ -11,8 +13,17 @@
       }
     },
     computed: {
-      isSinIn() {
+      isSignIn() {
         return this.type === 'sign-in' ? 1 : 0
+      }
+    },
+    methods: {
+      async authInit() {
+        if (this.isSignIn) {
+          console.log('login');
+          return
+        }
+        console.log('sign Up')
       }
     }
   }
@@ -24,7 +35,9 @@
     color: transparent;
     width: 12px;
     height: 13px;
-    background-image: url(~assets/svg/authButton/arrow.svg);
+    padding-right: 10px;
+    background: url(~assets/svg/authButton/arrow.svg) no-repeat 5px 5px;
+    background-size: 14px;
   }
   .sign-in:before {
     content: 'w';
