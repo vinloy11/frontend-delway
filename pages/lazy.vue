@@ -1,6 +1,11 @@
 <template>
   <div>
     <h1>Vue Lazyload Demo</h1>
+
+    <button @click="show()" class="btn">Modal open</button>
+    <lazy-component @show="handler">
+
+    </lazy-component>
     <modal name="example"
            :width="300"
            :height="300"
@@ -8,14 +13,13 @@
            @before-close="beforeClose">
       <b>{{time}}</b>
     </modal>
-    <button @click="show()" class="btn">Modal open</button>
     <div class="grid">
       <div
         v-for="(item, index) in img"
         :key="index"
         class="border-primary card"
       >
-        <img v-lazy="item" class="img-fluid" />
+        <img v-lazy="item" class="img-fluid"/>
       </div>
     </div>
   </div>
@@ -37,18 +41,15 @@
       };
     },
     methods: {
-      show () {
-        this.$modal.show('hello-world');
-      },
-      hide () {
+      hide() {
         this.$modal.hide('hello-world');
       },
-      beforeOpen (event) {
+      beforeOpen(event) {
         console.log(event)
         // Set the opening time of the modal
         this.time = Date.now()
       },
-      beforeClose (event) {
+      beforeClose(event) {
         console.log(event)
         // If modal was open less then 5000 ms - prevent closing it
         if (this.time + this.duration < Date.now()) {
@@ -57,6 +58,9 @@
       },
       show() {
         this.$modal.show('example')
+      },
+      handler(component) {
+        console.log('this component is showing')
       }
     }
   }

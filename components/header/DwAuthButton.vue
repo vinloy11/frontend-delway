@@ -20,7 +20,7 @@
     methods: {
       async authInit() {
         if (this.isSignIn) {
-          console.log('login');
+          console.log('sign in')
           return
         }
         console.log('sign Up')
