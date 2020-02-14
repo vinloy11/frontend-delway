@@ -1,12 +1,15 @@
 <template>
   <div>
     <h1>Vue Lazyload Demo</h1>
+    <template v-if="time > 0"><dw-auth-button :typeof="'sign-in'" >Kek lol</dw-auth-button></template>
     <modal name="example"
            :width="300"
            :height="300"
            @before-open="beforeOpen"
            @before-close="beforeClose">
       <b>{{time}}</b>
+      <dw-auth-button />
+
     </modal>
     <button @click="show()" class="btn">Modal open</button>
     <div class="grid">
@@ -18,11 +21,20 @@
         <img v-lazy="item" class="img-fluid" />
       </div>
     </div>
+    <dw-logo/>
   </div>
 </template>
 
 <script>
+  import DwAuthButton from "~/components/header/DwAuthButton";
+  import DwLogo from '~/assets/svg/logo.svg?inline';
+  import Header from "../components/Header";
   export default {
+    components: {
+      DwLogo,
+      DwAuthButton,
+      Header
+    },
     data() {
       return {
         time: 0,

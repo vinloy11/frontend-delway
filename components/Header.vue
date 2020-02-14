@@ -12,8 +12,8 @@
           <dw-user-inf/>
         </template>
         <template v-else>
-          <dw-auth-button :type="'sign-in'"/>
-          <dw-auth-button :type="'sign-up'"/>
+          <dw-auth-button state="start" btn-type="sign-in"/>
+          <dw-auth-button state="start" btn-type="sign-up"/>
         </template>
       </div>
     </section>
@@ -30,7 +30,6 @@
     async mounted() {
       this.isAuth = await this.$store.getters['authUser/isAuthenticated'];
       const strategyKek = await this.$auth.strategy;
-      console.log(strategyKek);
       this.user = await this.$store.dispatch('user/fetchUser');
     },
     components: {
