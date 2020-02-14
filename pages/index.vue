@@ -1,5 +1,5 @@
 <template>
-  <div>kek</div>
+  <div>Main page</div>
 </template>
 
 <script>
