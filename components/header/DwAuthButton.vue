@@ -7,17 +7,18 @@
       <div  class="sign-in content" v-if="isSignIn">
         <section v-if="forgotPassword">
           <h2 class="text-center">Восстановление пароля</h2>
-          <dw-input-text label="E-mail"  valid="name" type="email" placeholder="zororomz@gmail.com"/>
+          <dw-input-text  label="E-mail"  valid="name" type="text" placeholder="zororomz@gmail.com"/>
           <button
             @click="mainBlock = !mainBlock"
             class="btn warning big width-100 top-margin sign-up">Отправить пароль</button>
         </section>
         <section v-else>
           <h1 class="text-center">Авторизация</h1>
-          <dw-input-text label="E-mail"  valid="name" type="email" placeholder="zororomz@gmail.com"/>
+          <dw-input-text  label="E-mail" valid="name" type="text" placeholder="zororomz@gmail.com"/>
           <dw-input-text label="Пароль"  valid="name" type="password" placeholder="Не менее 8 символов"/>
-          <div class="errors"></div>
+          <dw-alert v-if="error" class="top-margin">Неправильный логин или пароль</dw-alert>
           <button
+            @click="error = !error"
             class="btn big success width-100 top-margin">Войти</button>
           <div class="width-100 text-center top-margin text-small semi-bold">
             <a @click.prevent="forgotPassword = !forgotPassword" href class="link">Забыли пароль?</a></div>
@@ -30,9 +31,10 @@
         <h1 class="text-center">Регистрация</h1>
         <section v-if="mainBlock" class="main">
           <div class="title semi-bold top-margin-m bottom-padding-s">Аккаунт</div>
-          <dw-input-text label="Логин"  valid="name" type="text" placeholder="Leemiant"/>
-          <dw-input-text label="E-mail"  valid="name" type="email" placeholder="zororomz@gmail.com"/>
+          <dw-input-text label="Логин"  valid="login" type="text" placeholder="Leemiant"/>
+          <dw-input-text label="E-mail"  valid="name" type="text" placeholder="zororomz@gmail.com"/>
           <dw-input-text label="Пароль"  valid="name" type="password" placeholder="Не менее 8 символов"/>
+          <dw-alert class="top-margin"/>
           <button
             @click="mainBlock = !mainBlock"
             class="btn big success width-100 top-margin">Продолжить регистрацию</button>
@@ -40,11 +42,11 @@
         <section v-else class="additional">
           <span class="text-small gray semi-bold inline-block width-100 text-center">Дополнительно</span>
           <div class="title semi-bold top-margin-m bottom-padding-s">Личные данные</div>
-          <dw-input-text label="Имя"  valid="name" type="text" placeholder="Leemiant"/>
-          <dw-input-text label="Фамилия"  valid="name" type="text" placeholder="Leemiant"/>
+          <dw-input-text label="Имя"  valid="name" type="text" placeholder="Артемий"/>
+          <dw-input-text label="Фамилия"  valid="name" type="text" placeholder="Лебедев"/>
           <div class="title semi-bold top-margin-m bottom-padding-s">Контакты</div>
-          <dw-input-text label="Страна"  valid="name" type="text" placeholder="Leemiant"/>
-          <dw-input-text label="Город"  valid="name" type="text" placeholder="Leemiant"/>
+          <dw-input-text label="Страна"  valid="name" type="text" placeholder="Россия"/>
+          <dw-input-text label="Город"  valid="name" type="text" placeholder="Красноярск"/>
           <button
             @click="mainBlock = !mainBlock"
             class="btn big  width-100 top-margin">Зарегестрироваться</button>
@@ -57,8 +59,9 @@
 <script>
   import DwModal from "../DwModal";
   import DwInputText from "../inputs/DwInputText";
+  import DwAlert from "../DwAlert";
   export default {
-    components: { DwModal, DwInputText },
+    components: { DwModal, DwInputText, DwAlert },
     props: {
       btnType: {
         type: String,
@@ -74,6 +77,7 @@
     },
     data() {
       return {
+        error: false,
         name: '',
         modalWidth: '416',
         mainBlock: false,

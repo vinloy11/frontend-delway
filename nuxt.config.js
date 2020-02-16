@@ -31,7 +31,8 @@ export default {
   plugins: [
     "@/plugins/vue-lazyload",
     "@/plugins/vue-js-modal",
-    '@/plugins/directives.js'
+    '@/plugins/directives.js',
+    '@/plugins/mask.js'
   ],
   /*
   ** Nuxt.js dev-modules
