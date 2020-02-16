@@ -32,6 +32,9 @@
         default: '100%'
       },
     },
+    mounted() {
+      this.$store.commit('errors/addHint', this.id);
+    },
     computed: {
       trimValue: {
         set(v) {
@@ -54,14 +57,22 @@
         hint: '',
         highlight: '',
         inputValue: '',
+        id: (Math.random() + new Date().getTime()).toString()
       }
     },
     methods: {
       validate() {
-        console.log(this.inputValue);
+        // console.log(this.inputValue);
         const validateEnd = mainValid[this.valid](this.inputValue);
         this.hint = validateEnd.hint;
-        this.highlight = this.hint ? 'error' : 'success'
+        if (this.hint) {
+          this.$store.commit('errors/addHint', this.id);
+          // this.$emit('validInput', this.valid)
+          this.highlight = 'error';
+          return
+        }
+        this.$store.commit('errors/removeHint', this.id);
+        this.highlight = 'success'
       }
     }
   }

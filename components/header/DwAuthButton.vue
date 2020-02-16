@@ -32,10 +32,11 @@
         <section v-if="mainBlock" class="main">
           <div class="title semi-bold top-margin-m bottom-padding-s">Аккаунт</div>
           <dw-input-text label="Логин"  valid="login" type="text" placeholder="Leemiant"/>
-          <dw-input-text label="E-mail"  valid="name" type="text" placeholder="zororomz@gmail.com"/>
-          <dw-input-text label="Пароль"  valid="name" type="password" placeholder="Не менее 8 символов"/>
+          <dw-input-text label="E-mail"  valid="login" type="text" placeholder="zororomz@gmail.com"/>
+          <dw-input-text label="Пароль"  valid="login" type="password" placeholder="Не менее 8 символов"/>
           <dw-alert class="top-margin"/>
           <button
+            v-if="$store.getters['errors/isValid']"
             @click="mainBlock = !mainBlock"
             class="btn big success width-100 top-margin">Продолжить регистрацию</button>
         </section>
@@ -77,10 +78,10 @@
     },
     data() {
       return {
-        error: false,
+        error: true,
         name: '',
         modalWidth: '416',
-        mainBlock: false,
+        mainBlock: true,
         forgotPassword: false
       }
     },

@@ -1,6 +1,7 @@
 <template>
   <section class="width-100 text-center error text-small bold height-normal">
-    <span v-for='(error, index) in errors' :key='index'>{{ error }}</span>
+<!--    <span v-for='(error, index) in errors' :key='index'>{{ error }}</span>-->
+    {{ $store.getters['errors/ids'] }}
   </section>
 </template>
 
@@ -9,7 +10,7 @@
 
   export default {
     computed: {
-      ...mapGetters([ 'errors' ])
+      ...mapGetters([ 'errors', 'hints' ])
     }
   }
 </script>
