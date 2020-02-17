@@ -6,7 +6,8 @@
       @blur="validate"
       v-dw-debounce:keyup="{wait: 100, func: validate, immediate: true }"
       :type="type"
-      v-model="trimValue"
+      v-bind:value="trimValue"
+      v-on:input="$emit('input', $event.target.value)"
       :placeholder="placeholder"
       :class="highlight"
     >
@@ -16,6 +17,9 @@
 <script>
   export default {
     props: {
+      value: {
+        type: String
+      },
       label: {
         type: String
       },
@@ -31,49 +35,59 @@
       width: {
         default: '100%'
       },
+      id: {
+        type: String
+      }
     },
     mounted() {
+      this.validate();
       this.$store.commit('errors/addHint', this.id);
     },
     computed: {
       trimValue: {
         set(v) {
           if (this.type === 'password') {
-            this.inputValue = v;
+            this.value = v;
             return
           }
-          this.inputValue = v.split(' ').join('');
+          this.value = v.split(' ').join('');
         },
         get() {
           if (this.type === 'password') {
-            return this.inputValue
+            return this.value
           }
-          return this.inputValue.split(' ').join('')
+          return this.value.split(' ').join('')
         }
-      }
+      },
     },
     data() {
       return {
         hint: '',
         highlight: '',
-        inputValue: '',
-        id: (Math.random() + new Date().getTime()).toString()
       }
     },
     methods: {
-      validate() {
-        const validateEnd = mainValid[this.valid](this.inputValue);
+      async validate() {
+        const validateEnd = await mainValid[this.valid](this.value);
+        if (!this.value) return;
         this.hint = validateEnd.hint;
         if (this.hint) {
-          this.$store.commit('errors/addHint', this.id);
+          sendHint(this.$store, this.id, 'addHint');
           this.highlight = 'error';
           return
         }
-        this.$store.commit('errors/removeHint', this.id);
-        this.highlight = 'success'
+        sendHint(this.$store, this.id, 'removeHint');
+        // this.$store.commit('errors/removeHint', this.id);
+        this.highlight = 'success';
       }
     }
   }
+
+  function sendHint(store, id, method) {
+    return store.commit(`errors/${method}`, id);
+  }
+
+
   let hint = '';
   const mainValid = {
     name(value) {

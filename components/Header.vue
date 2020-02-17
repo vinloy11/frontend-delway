@@ -51,7 +51,6 @@
         this.$auth.loginWith('local', {
           data: user
         });
-        console.log(user)
       },
       async logout() {
         await this.$auth.logout()

@@ -1,7 +1,8 @@
 export const state = () => ({
   errors: [],
   ids: [],
-  isValid: false
+  isValid: false,
+  hints: {}
 });
 
 export const getters = {
@@ -19,15 +20,12 @@ export const mutations = {
     return match ? '' : state.ids.push(id)
   },
   removeHint: (state, id) => {
-    Array.from(state.ids).find(kek => {
-      console.log(kek)
-    });
     state.ids = state.ids.filter(item => item !== id);
     return state.ids.length ? state.isValid = false : state.isValid = true
   },
   removeHints: state => {
     state.ids = [];
-  }
+  },
 };
 
 export const actions = {
@@ -36,4 +34,3 @@ export const actions = {
     // setTimeout(() => commit('popError'), 3000);
   },
 };
-
