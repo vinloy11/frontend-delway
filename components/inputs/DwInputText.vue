@@ -62,12 +62,10 @@
     },
     methods: {
       validate() {
-        // console.log(this.inputValue);
         const validateEnd = mainValid[this.valid](this.inputValue);
         this.hint = validateEnd.hint;
         if (this.hint) {
           this.$store.commit('errors/addHint', this.id);
-          // this.$emit('validInput', this.valid)
           this.highlight = 'error';
           return
         }
@@ -82,7 +80,7 @@
 
     },
     login(value) {
-      let valid = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value)
+      let valid = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value);
       if (valid) {
         hint = ''
       } else if (value.length <= 1) {

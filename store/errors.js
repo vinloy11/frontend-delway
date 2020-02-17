@@ -25,7 +25,9 @@ export const mutations = {
     state.ids = state.ids.filter(item => item !== id);
     return state.ids.length ? state.isValid = false : state.isValid = true
   },
-
+  removeHints: state => {
+    state.ids = [];
+  }
 };
 
 export const actions = {
