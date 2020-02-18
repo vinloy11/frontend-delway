@@ -84,6 +84,7 @@
               return
             }
             sendHint(this.$store, this.id, 'removeHint');
+            this.highlight = 'success';
             return
           }
           validateEnd ? sendHint(this.$store, this.id, 'addHint')
