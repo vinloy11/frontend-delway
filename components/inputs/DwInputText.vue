@@ -37,10 +37,16 @@
       },
       id: {
         type: String
+      },
+      minLength: {
+        type: Number,
+      },
+      maxLength: {
+        type: Number
       }
     },
     mounted() {
-      this.validate();
+      this.validate(false);
       this.$store.commit('errors/addHint', this.id);
     },
     computed: {
@@ -67,51 +73,79 @@
       }
     },
     methods: {
-      async validate() {
-        const validateEnd = await mainValid[this.valid](this.value);
-        if (!this.value) return;
-        this.hint = validateEnd.hint;
+      async validate(highlight = true) {
+        const validateEnd = await mainValid[this.valid](this.value, this.minLength, this.maxLength);
+        if (!highlight) {
+          if (this.value) {
+            if (validateEnd) {
+              sendHint(this.$store, this.id, 'addHint');
+              this.hint = validateEnd;
+              this.highlight = 'error';
+              return
+            }
+            sendHint(this.$store, this.id, 'removeHint');
+            return
+          }
+          validateEnd ? sendHint(this.$store, this.id, 'addHint')
+            : sendHint(this.$store, this.id, 'removeHint');
+          return
+        }
+
+        this.hint = validateEnd;
         if (this.hint) {
           sendHint(this.$store, this.id, 'addHint');
           this.highlight = 'error';
           return
         }
         sendHint(this.$store, this.id, 'removeHint');
-        // this.$store.commit('errors/removeHint', this.id);
         this.highlight = 'success';
       }
     }
   }
 
   function sendHint(store, id, method) {
-    return store.commit(`errors/${method}`, id);
+    return store.commit(`errors/${ method }`, id);
   }
 
 
   let hint = '';
   const mainValid = {
-    name(value) {
-
+    name(value, minLength, maxLength) {
+      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+      return hint;
     },
-    login(value) {
-      let valid = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value);
-      if (valid) {
-        hint = ''
-      } else if (value.length <= 1) {
-        hint = 'Заполните поле более чем на 1 симовл'
-      } else {
-        hint = 'Только латиница и цифры'
-      }
-      return {
-        hint
-      }
+    password(value, minLength, maxLength) {
+      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+      return hint;
     },
-    email(value) {
-
+    login(value, minLength, maxLength) {
+      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+      if (hint) return hint;
+      hint = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value);
+      return hint
+    },
+    email(value, minLength, maxLength) {
+      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+      if (hint) return hint;
+      hint = regHandler(
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        , value);
+      return hint
+    },
+    emptyField(value) {
+      return value ? '' : 'Поле не должно быть пустым'
+    },
+    fillInMore(value, minLength) {
+      if (!minLength) return;
+      return value.length < minLength ? `Не менее ${minLength} символов` : ''
+    },
+    fillLess(value, maxLength) {
+      if (!maxLength) return;
+      return value.length > maxLength ? `Не более ${maxLength} символов` : ''
     }
   };
 
-  const regHandler = (reg, value) => (reg.test(value))
+  const regHandler = (reg, value) => (reg.test(value) ? '' : 'Поле заполнено неверно')
 </script>
 
 <style lang="scss" scoped>

@@ -25,7 +25,7 @@
                        :value="signInFrom.password"
                        @input="signInFrom.password = $event"
                        valid="login" type="password"
-                       placeholder="Не менее 8 символов"/>
+                       placeholder="Введите пароль..."/>
         <dw-alert v-if="error" class="top-margin">Неправильный логин или пароль</dw-alert>
         <button
           @click="error = !error"
@@ -47,6 +47,8 @@
                        id="signUpLogin"
                        @input="signUpFrom.login = $event"
                        label="Логин"
+                       :max-length="6"
+                       :min-length="3"
                        valid="login"
                        type="text"
                        placeholder="Leemiant"/>
@@ -54,16 +56,16 @@
                        id="signUpEmail"
                        :value="signUpFrom.email"
                        @input="signUpFrom.email = $event"
-                       valid="login"
+                       valid="email"
                        type="text"
                        placeholder="zororomz@gmail.com"/>
         <dw-input-text :value="signUpFrom.password"
                        id="signUpPassword"
                        @input="signUpFrom.password = $event"
-                       label="Пароль" valid="login" type="password" placeholder="Не менее 8 символов"/>
+                       label="Пароль" valid="password" type="password" placeholder="Введите пароль..."/>
         <dw-alert class="top-margin"/>
         <button
-          v-if="$store.getters['errors/isValid']"
+          :disabled="isValid === 1"
           @click="nextBlock"
           class="btn big success width-100 top-margin">Продолжить регистрацию
         </button>
@@ -111,6 +113,11 @@
       DwInputText, DwAlert,
       DwModal: () => import("../DwModal")
     },
+    computed: {
+      isValid() {
+        return this.$store.getters['errors/isValid'] ? 0 : 1
+      }
+    },
     mounted() {
       this.$parent.$on('openModal', this.open);
       this.name = (Math.random() + new Date().getTime()).toString();
@@ -125,6 +132,7 @@
     },
     data() {
       return {
+        disabled: 0,
         error: true,
         name: '',
         modalWidth: '416',

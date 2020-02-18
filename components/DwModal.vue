@@ -5,6 +5,7 @@
     :scrollable="scrollable"
     :adaptive="adaptive"
     @before-close="beforeClose"
+    @closed="closed"
     @openModal="open()" :name="name">
     <div class="x-icon-wrapper top-margin right-margin">
       <dw-x-icon class="x-icon icon" @click="close"/>
@@ -56,6 +57,9 @@
         this.$modal.hide(this.name)
       },
       beforeClose(event) {
+        // await this.$store.commit('errors/removeHints');
+      },
+      closed() {
         this.$store.commit('errors/removeHints');
       }
     }
