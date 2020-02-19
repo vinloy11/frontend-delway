@@ -47,7 +47,7 @@
     },
     mounted() {
       this.validate(false);
-      this.$store.commit('errors/addHint', this.id);
+      this.valid ? this.$store.commit('errors/addHint', this.id) : '';
     },
     computed: {
       trimValue: {
@@ -74,24 +74,17 @@
     },
     methods: {
       async validate(highlight = true) {
+        if (!this.valid) {
+          console.log('kek')
+          this.highlight = '';
+          return
+        }
         const validateEnd = await mainValid[this.valid](this.value, this.minLength, this.maxLength);
-        if (!highlight) {
-          if (this.value) {
-            if (validateEnd) {
-              sendHint(this.$store, this.id, 'addHint');
-              this.hint = validateEnd;
-              this.highlight = 'error';
-              return
-            }
-            sendHint(this.$store, this.id, 'removeHint');
-            this.highlight = 'success';
-            return
-          }
+        if (!this.value && !highlight) {
           validateEnd ? sendHint(this.$store, this.id, 'addHint')
             : sendHint(this.$store, this.id, 'removeHint');
           return
         }
-
         this.hint = validateEnd;
         if (this.hint) {
           sendHint(this.$store, this.id, 'addHint');

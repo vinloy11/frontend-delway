@@ -16,14 +16,14 @@
         <h1 class="text-center">Авторизация</h1>
         <dw-input-text label="E-mail"
                        id="signInEmail"
-                       :value="signInFrom.login"
-                       @input="signInFrom.login = $event"
+                       :value="signInForm.login"
+                       @input="signInForm.login = $event"
                        valid="login" type="text"
                        placeholder="zororomz@gmail.com"/>
         <dw-input-text label="Пароль"
                        id="signInPassword"
-                       :value="signInFrom.password"
-                       @input="signInFrom.password = $event"
+                       :value="signInForm.password"
+                       @input="signInForm.password = $event"
                        valid="login" type="password"
                        placeholder="Введите пароль..."/>
         <dw-alert v-if="error" class="top-margin">Неправильный логин или пароль</dw-alert>
@@ -34,67 +34,14 @@
         <div class="width-100 text-center top-margin text-small semi-bold">
           <a @click.prevent="forgotPassword = !forgotPassword" href class="link">Забыли пароль?</a></div>
         <button
-          @click="mainBlock = !mainBlock"
+          @click="goToSignUp"
           class="btn big  width-100 top-margin sign-up">Зарегестрироваться
         </button>
       </section>
     </div>
     <div class="sign-up content " v-else>
       <h1 class="text-center">Регистрация</h1>
-      <section v-if="mainBlock" class="main">
-        <div class="title semi-bold top-margin-m bottom-padding-s">Аккаунт</div>
-        <dw-input-text :value="signUpFrom.login"
-                       id="signUpLogin"
-                       @input="signUpFrom.login = $event"
-                       label="Логин"
-                       :max-length="6"
-                       :min-length="3"
-                       valid="login"
-                       type="text"
-                       placeholder="Leemiant"/>
-        <dw-input-text label="E-mail"
-                       id="signUpEmail"
-                       :value="signUpFrom.email"
-                       @input="signUpFrom.email = $event"
-                       valid="email"
-                       type="text"
-                       placeholder="zororomz@gmail.com"/>
-        <dw-input-text :value="signUpFrom.password"
-                       id="signUpPassword"
-                       @input="signUpFrom.password = $event"
-                       label="Пароль" valid="password" type="password" placeholder="Введите пароль..."/>
-        <dw-alert class="top-margin"/>
-        <button
-          :disabled="isValid === 1"
-          @click="nextBlock"
-          class="btn big success width-100 top-margin">Продолжить регистрацию
-        </button>
-      </section>
-      <section v-else class="additional">
-        <span class="text-small gray semi-bold inline-block width-100 text-center">Дополнительно</span>
-        <div class="title semi-bold top-margin-m bottom-padding-s">Личные данные</div>
-        <dw-input-text :value="signUpFrom.name"
-                       id="signUpName"
-                       @input="signUpFrom.name = $event"
-                       label="Имя" valid="name" type="text" placeholder="Артемий"/>
-        <dw-input-text :value="signUpFrom.surname"
-                       id="signUpSurname"
-                       @input="signUpFrom.surname = $event"
-                       label="Фамилия" valid="name" type="text" placeholder="Лебедев"/>
-        <div class="title semi-bold top-margin-m bottom-padding-s">Контакты</div>
-        <dw-input-text :value="signUpFrom.country"
-                       id="signUpCountry"
-                       @input="signUpFrom.country = $event"
-                       label="Страна" valid="name" type="text" placeholder="Россия"/>
-        <dw-input-text :value="signUpFrom.city"
-                       id="signUpCity"
-                       @input="signUpFrom.city = $event"
-                       label="Город" valid="name" type="text" placeholder="Красноярск"/>
-        <button
-          @click="nextBlock"
-          class="btn big  width-100 top-margin">Зарегестрироваться
-        </button>
-      </section>
+      <component @nextStep="nextBlock()" :sign-up-form="signUpForm" :is="signUpComponent"/>
     </div>
   </dw-modal>
 </template>
@@ -113,32 +60,16 @@
       DwInputText, DwAlert,
       DwModal: () => import("../DwModal")
     },
-    computed: {
-      isValid() {
-        return this.$store.getters['errors/isValid'] ? 0 : 1
-      }
-    },
-    mounted() {
-      this.$parent.$on('openModal', this.open);
-      this.name = (Math.random() + new Date().getTime()).toString();
-    },
-    methods: {
-      nextBlock() {
-        this.mainBlock = !this.mainBlock
-      },
-      open() {
-        this.$emit('openModal');
-      }
-    },
     data() {
       return {
         disabled: 0,
         error: true,
+        signUpComponent: null,
         name: '',
         modalWidth: '416',
         mainBlock: true,
         forgotPassword: false,
-        signUpFrom: {
+        signUpForm: {
           login: '',
           email: '',
           password: '',
@@ -147,7 +78,7 @@
           country: '',
           city: ''
         },
-        signInFrom: {
+        signInForm: {
           login: '',
           password: ''
         },
@@ -156,7 +87,39 @@
         }
       }
     },
+    async mounted() {
+      this.signUpComponent = () => this.dynamicComponent();
+      this.$parent.$on('openModal', this.open);
+      this.name = (Math.random() + new Date().getTime()).toString();
+    },
+    computed: {
+
+    },
+    methods: {
+      toggleSignIn() {
+        return this.isSignIn = !this.isSignIn
+      },
+      dynamicComponent() {
+        return this.mainBlock ? import(`~/components/header/signUp/Main.vue`)
+          : import(`~/components/header/signUp/Additional.vue`);
+      },
+      open() {
+        this.$emit('openModal');
+      },
+      nextBlock() {
+        this.mainBlock = !this.mainBlock;
+        this.signUpComponent = () => this.dynamicComponent()
+      },
+      goToSignUp() {
+        // this.toggleSignIn();
+        console.log('lel')
+        // this.isSignIn = !this.isSignIn
+        this.$emit('goToSignUp');
+        this.$store.commit('errors/removeHints');
+      }
+    },
   }
+
 
 
 </script>

@@ -12,8 +12,8 @@
           <dw-user-inf/>
         </template>
         <template v-else>
-          <dw-auth-button state="start" btn-type="sign-in"/>
-          <dw-auth-button state="start" btn-type="sign-up"/>
+          <dw-auth-button  state="start" btn-type="sign-in"/>
+          <dw-auth-button  state="start" btn-type="sign-up"/>
         </template>
       </div>
     </section>

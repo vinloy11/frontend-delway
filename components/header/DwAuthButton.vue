@@ -1,15 +1,14 @@
 <template>
   <div>
-    <button @click="authInit()" :class="['btn', isSignIn ? 'sign-in default' : 'sign-up']">
+    <button @click="authInit()" :class="['btn', this.btnType === 'sign-in' ? 'sign-in default' : 'sign-up']">
       <span v-html="isSignIn ? 'Войти' : 'Зарегестрироваться'"/>
     </button>
-    <component :is-sign-in="isSignIn" :is="authUser"></component>
+    <component @goToSignUp="goToSignUp" :is-sign-in="isSignIn" :is="authUser"/>
   </div>
 </template>
 
 <script>
   export default {
-
     props: {
       btnType: {
         type: String,
@@ -18,15 +17,21 @@
       state: {
         type: String,
         required: true,
+      },
+    },
+    data() {
+      return {
+        isSignIn: null
       }
     },
     asyncData() {
       // this.$options.components['DwModal'] = () => require('../DwModal.vue')
     },
+    created() {
+      this.isSignIn = this.btnType === 'sign-in' ? 1 : 0
+    },
     mounted() {
-
       this.name = (Math.random() + new Date().getTime()).toString();
-
     },
     watch: {
       forgotPassword() {
@@ -34,14 +39,14 @@
       }
     },
     computed: {
-      isSignIn() {
-        return this.btnType === 'sign-in' ? 1 : 0
-      },
       isStart() {
         return this.state === 'start' ? 1 : 0
       },
     },
     methods: {
+      goToSignUp() {
+        console.log('kelew')
+      },
       async authInit() {
         if (this.isStart) {
           this.$emit('openModal');

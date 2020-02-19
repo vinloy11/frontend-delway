@@ -26,7 +26,7 @@ export const mutations = {
   removeHints: async state => {
     console.log(state.ids)
     state.ids = [];
-    state.hints = {}
+    state.hints = {};
     console.log(await state.ids)
   },
 };
