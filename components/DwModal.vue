@@ -10,7 +10,7 @@
     <div class="x-icon-wrapper top-margin right-margin">
       <dw-x-icon class="x-icon icon" @click="close"/>
     </div>
-    <slot></slot>
+    <slot @closeModal="close"/>
   </modal>
 </template>
 

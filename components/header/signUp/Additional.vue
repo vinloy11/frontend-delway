@@ -1,5 +1,6 @@
 <template>
   <section v-else class="additional">
+    <back-arrow @click.prevent="back()" class="link absolute bold back-arrow rotate" />
     <span class="text-small gray semi-bold inline-block width-100 text-center">Дополнительно</span>
     <div class="title semi-bold top-margin-m bottom-padding-s">Личные данные</div>
     <dw-input-text :value="signUpForm.name"
@@ -20,7 +21,7 @@
                    @input="signUpForm.city = $event"
                    label="Город" type="text" placeholder="Красноярск"/>
     <button
-      @click="nextStep"
+      @click="endRegistration"
       class="btn big  width-100 top-margin">Зарегестрироваться
     </button>
   </section>
@@ -28,6 +29,7 @@
 
 <script>
   import DwInputText from "../../inputs/DwInputText";
+  import BackArrow from '~/assets/svg/authButton/arrow.svg?inline';
   export default {
     props: {
       signUpForm: {
@@ -35,10 +37,14 @@
       }
     },
     components: {
-      DwInputText
+      DwInputText, BackArrow
     },
     methods: {
-      nextStep() {
+      endRegistration() {
+        this.back();
+        this.$emit('closeModal')
+      },
+      back() {
         this.$emit('nextStep')
       }
     }
@@ -48,7 +54,6 @@
 <style lang="scss" scoped>
   .content {
     padding: 3rem 1rem 1rem 1rem;
-
     .title {
       line-height: 1rem;
       color: #3F4C67;

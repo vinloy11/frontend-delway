@@ -75,7 +75,6 @@
     methods: {
       async validate(highlight = true) {
         if (!this.valid) {
-          console.log('kek')
           this.highlight = '';
           return
         }
@@ -116,6 +115,7 @@
       hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
       if (hint) return hint;
       hint = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value);
+      hint  = hint ? 'Только латиница и цифры' : ''
       return hint
     },
     email(value, minLength, maxLength) {

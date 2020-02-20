@@ -24,10 +24,8 @@ export const mutations = {
     return state.ids.length ? state.isValid = false : state.isValid = true
   },
   removeHints: async state => {
-    console.log(state.ids)
     state.ids = [];
     state.hints = {};
-    console.log(await state.ids)
   },
 };
 

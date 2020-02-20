@@ -5,8 +5,7 @@
                    id="signUpLogin"
                    @input="signUpForm.login = $event"
                    label="Логин"
-                   :max-length="6"
-                   :min-length="3"
+                   :min-length="2"
                    valid="login"
                    type="text"
                    placeholder="Leemiant"/>
@@ -19,6 +18,7 @@
                    placeholder="zororomz@gmail.com"/>
     <dw-input-text :value="signUpForm.password"
                    id="signUpPassword"
+                   :min-length="6"
                    @input="signUpForm.password = $event"
                    label="Пароль" valid="password" type="password" placeholder="Введите пароль..."/>
     <dw-alert class="top-margin"/>

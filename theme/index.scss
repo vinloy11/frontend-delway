@@ -343,6 +343,36 @@ html {
   .width-100 {
     width: 100%;
   }
+
+  .absolute {
+    position: absolute;
+  }
+
+  .relative {
+    position: relative;
+  }
+
+  .back-arrow {
+    cursor: pointer;
+    top: 16px;
+    left: 16px;
+    fill: red;
+    width: 1.5rem;
+    height: 1.5rem;
+    box-sizing: border-box;
+    padding: 0 4px;
+    transform: rotate(180deg);
+    background: var(--dark-blue);
+    &:hover {
+      background: var(--blue);
+    }
+    &:active {
+      background: var(--light-blue);
+      transform: rotate(180deg) scale(0.9);
+
+    }
+  }
+
 }
 
 *,
