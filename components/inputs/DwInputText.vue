@@ -3,20 +3,22 @@
     <div><span class="label text-small semi-bold gray">{{ label }}</span><span :class="['state', highlight ]"/></div>
     <span class="hint semi-bold gray">{{ hint }}</span>
     <input
-      @blur="validate"
-      v-dw-debounce:keyup="{wait: 100, func: validate, immediate: true }"
       :type="type"
-      v-bind:value="trimValue"
-      v-on:input="$emit('input', $event.target.value)"
+      @blur="validate"
+      ref="input"
+      v-dw-debounce:keyup="{wait: 100, func: validate, immediate: true }"
+      v-model="userInput"
       :placeholder="placeholder"
       :class="highlight"
     >
   </label>
 </template>
-
 <script>
   export default {
     props: {
+      focus: {
+        type: Boolean
+      },
       value: {
         type: String
       },
@@ -43,28 +45,36 @@
       },
       maxLength: {
         type: Number
-      }
+      },
     },
     mounted() {
+      this.focus ? (this.$refs.input.value ? '' : this.$refs.input.focus()) : '';
       this.validate(false);
       this.valid ? this.$store.commit('errors/addHint', this.id) : '';
     },
+    beforeCreate() {
+      if (this.$options.propsData.type === 'password') {
+        this.$store.commit('form/createFieldPassword', this.$options.propsData.id);
+        return
+      }
+      this.$store.commit('form/createField', this.$options.propsData.id)
+    },
     computed: {
-      trimValue: {
-        set(v) {
-          if (this.type === 'password') {
-            this.value = v;
-            return
-          }
-          this.value = v.split(' ').join('');
-        },
+      userInput: {
         get() {
           if (this.type === 'password') {
-            return this.value
+            return this.$store.getters['form/userPassword'](this.id)
           }
-          return this.value.split(' ').join('')
+          return this.$store.getters['form/userInput'](this.id)
+        },
+        set(value) {
+          if (this.type === 'password') {
+            this.$store.commit('form/updatedPasswordInput', { value: value, name: this.id })
+            return
+          }
+          this.$store.commit('form/updatedUserInput', { value: value.split(' ').join(''), name: this.id })
         }
-      },
+      }
     },
     data() {
       return {
@@ -78,8 +88,19 @@
           this.highlight = '';
           return
         }
-        const validateEnd = await mainValid[this.valid](this.value, this.minLength, this.maxLength);
-        if (!this.value && !highlight) {
+        let inputValue;
+        if (this.type === 'password') {
+          inputValue = await this.$store.getters['form/userPassword'](this.id)
+        } else {
+          inputValue = await this.$store.getters['form/userInput'](this.id);
+        }
+        const validateEnd = await this.$store.getters['errors/hint']({
+          valid: this.valid,
+          value: inputValue,
+          minLength: this.minLength,
+          maxLength: this.maxLength
+        });
+        if (!inputValue && !highlight) {
           validateEnd ? sendHint(this.$store, this.id, 'addHint')
             : sendHint(this.$store, this.id, 'removeHint');
           return
@@ -92,7 +113,15 @@
         }
         sendHint(this.$store, this.id, 'removeHint');
         this.highlight = 'success';
+
       }
+    },
+    updated() {
+      if (this.type === 'password') {
+        this.$refs.input.value = this.$store.getters['form/userPassword'](this.id);
+        return
+      }
+      this.$refs.input.value = this.$store.getters['form/userInput'](this.id);
     }
   }
 
@@ -100,46 +129,6 @@
     return store.commit(`errors/${ method }`, id);
   }
 
-
-  let hint = '';
-  const mainValid = {
-    name(value, minLength, maxLength) {
-      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
-      return hint;
-    },
-    password(value, minLength, maxLength) {
-      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
-      return hint;
-    },
-    login(value, minLength, maxLength) {
-      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
-      if (hint) return hint;
-      hint = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value);
-      hint  = hint ? 'Только латиница и цифры' : ''
-      return hint
-    },
-    email(value, minLength, maxLength) {
-      hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
-      if (hint) return hint;
-      hint = regHandler(
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        , value);
-      return hint
-    },
-    emptyField(value) {
-      return value ? '' : 'Поле не должно быть пустым'
-    },
-    fillInMore(value, minLength) {
-      if (!minLength) return;
-      return value.length < minLength ? `Не менее ${minLength} символов` : ''
-    },
-    fillLess(value, maxLength) {
-      if (!maxLength) return;
-      return value.length > maxLength ? `Не более ${maxLength} символов` : ''
-    }
-  };
-
-  const regHandler = (reg, value) => (reg.test(value) ? '' : 'Поле заполнено неверно')
 </script>
 
 <style lang="scss" scoped>

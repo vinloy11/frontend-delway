@@ -28,6 +28,7 @@
 
   export default {
     async mounted() {
+      this.$store.commit('form/getStorage')
       this.isAuth = await this.$store.getters['authUser/isAuthenticated'];
       const strategyKek = await this.$auth.strategy;
       this.user = await this.$store.dispatch('user/fetchUser');

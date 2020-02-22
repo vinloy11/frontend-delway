@@ -8,7 +8,10 @@ export const state = () => ({
 export const getters = {
   errors: state => state.errors,
   ids: state => state.ids,
-  isValid: state => state.isValid
+  isValid: state => state.isValid,
+  hint: () => field => {
+    return mainValid[field.valid](field.value, field.minLength, field.maxLength)
+  }
 };
 
 export const mutations = {
@@ -35,3 +38,43 @@ export const actions = {
     // setTimeout(() => commit('popError'), 3000);
   },
 };
+
+const mainValid = {
+  hint: '',
+  name(value, minLength, maxLength) {
+    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+    return this.hint;
+  },
+  password(value, minLength, maxLength) {
+    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+    return this.hint;
+  },
+  login(value, minLength, maxLength) {
+    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+    if (this.hint) return this.hint;
+    this.hint = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value);
+    this.hint = this.hint ? 'Только латиница и цифры' : '';
+    return this.hint
+  },
+  email(value, minLength, maxLength) {
+    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+    if (this.hint) return this.hint;
+    this.hint = regHandler(
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      , value);
+    return this.hint
+  },
+  emptyField(value) {
+    return value ? '' : 'Поле не должно быть пустым'
+  },
+  fillInMore(value, minLength) {
+    if (!minLength) return;
+    return value.length < minLength ? `Не менее ${ minLength } символов` : ''
+  },
+  fillLess(value, maxLength) {
+    if (!maxLength) return;
+    return value.length > maxLength ? `Не более ${ maxLength } символов` : ''
+  }
+};
+
+const regHandler = (reg, value) => (reg.test(value) ? '' : 'Поле заполнено неверно');

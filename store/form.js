@@ -1,26 +1,46 @@
 export const state = () => ({
-  fields: []
+  fields: [],
+  userInput: {
+  },
+  userPasswords: {
+
+  }
 });
 
 export const getters = {
   fields: state => (state.fields),
-  value: (state, name) => (state.fields[name])
-};
-
-export const mutations = {
-  createField(state, name) {
-    state.push(name)
+  value: state => name => {
+    return state.fields[name]
   },
-  async updateValue({commit, state}, field) {
-    if (state[field.name]) {
-      state[field.name] = state.value;
-      return
-    }
-    await commit.createField();
-    state[field.name] = state.value
+  userInput: state => name => {
+    return state.userInput[name]
+  },
+  userPassword: state => name => {
+    return state.userPasswords[name]
   }
 };
 
-export const actions = {
-
+export const mutations = {
+  updatedUserInput(state, field) {
+    state.userInput[field.name] = field.value;
+    localStorage.setItem('inputs', JSON.stringify(state.userInput));
+  },
+  updatedPasswordInput(state, field) {
+    state.userPasswords[field.name] = field.value;
+  },
+  createField(state, name) {
+    if (state.userInput[name]) return;
+    state.userInput[name] = '';
+  },
+  createFieldPassword(state, name) {
+    if (state.userPasswords[name]) return;
+    state.userPasswords[name] = '';
+  },
+  getStorage(state) {
+    const storageForm = JSON.parse(localStorage.getItem('inputs'));
+    if (!storageForm) return;
+    state.userInput = storageForm
+  }
 };
+
+const isEmptyObject = (object) => (Object.entries(object).length === 0)

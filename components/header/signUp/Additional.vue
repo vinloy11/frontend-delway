@@ -3,22 +3,19 @@
     <back-arrow @click.prevent="back()" class="link absolute bold back-arrow rotate" />
     <span class="text-small gray semi-bold inline-block width-100 text-center">Дополнительно</span>
     <div class="title semi-bold top-margin-m bottom-padding-s">Личные данные</div>
-    <dw-input-text :value="signUpForm.name"
-                   id="signUpName"
-                   @input="signUpForm.name = $event"
+    <dw-input-text id="signUpName"
+                   ref="signUpName"
+                   :focus="true"
                    label="Имя" type="text" placeholder="Артемий"/>
-    <dw-input-text :value="signUpForm.surname"
-                   id="signUpSurname"
-                   @input="signUpForm.surname = $event"
+    <dw-input-text id="signUpSurname"
+                   ref="signUpSurname"
                    label="Фамилия" type="text" placeholder="Лебедев"/>
     <div class="title semi-bold top-margin-m bottom-padding-s">Контакты</div>
-    <dw-input-text :value="signUpForm.country"
-                   id="signUpCountry"
-                   @input="signUpForm.country = $event"
+    <dw-input-text id="signUpCountry"
+                   ref="signUpCountry"
                    label="Страна" type="text" placeholder="Россия"/>
-    <dw-input-text :value="signUpForm.city"
-                   id="signUpCity"
-                   @input="signUpForm.city = $event"
+    <dw-input-text id="signUpCity"
+                   ref="signUpCity"
                    label="Город" type="text" placeholder="Красноярск"/>
     <button
       @click="endRegistration"

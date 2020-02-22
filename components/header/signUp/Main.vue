@@ -1,25 +1,20 @@
 <template>
   <section class="main">
     <div class="title semi-bold top-margin-m bottom-padding-s">Аккаунт</div>
-    <dw-input-text :value="signUpForm.login"
-                   id="signUpLogin"
-                   @input="signUpForm.login = $event"
+    <dw-input-text id="signUpLogin"
                    label="Логин"
+                   :focus="true"
                    :min-length="2"
                    valid="login"
                    type="text"
                    placeholder="Leemiant"/>
     <dw-input-text label="E-mail"
-                   id="signUpEmail"
-                   :value="signUpForm.email"
-                   @input="signUpForm.email = $event"
+                   id="email"
                    valid="email"
                    type="text"
                    placeholder="zororomz@gmail.com"/>
-    <dw-input-text :value="signUpForm.password"
-                   id="signUpPassword"
+    <dw-input-text id="signUpPassword"
                    :min-length="6"
-                   @input="signUpForm.password = $event"
                    label="Пароль" valid="password" type="password" placeholder="Введите пароль..."/>
     <dw-alert class="top-margin"/>
     <button

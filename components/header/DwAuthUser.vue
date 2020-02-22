@@ -4,9 +4,7 @@
       <section v-if="forgotPassword">
         <h2 class="text-center">Восстановление пароля</h2>
         <back-arrow @click.prevent="forgotPassword = !forgotPassword" class="link absolute bold back-arrow rotate" />
-        <dw-input-text id="passwordRecovery"
-                       :value="passwordRecoveryForm.email"
-                       @input="passwordRecoveryForm.email = $event"
+        <dw-input-text id="email" :focus="true"
                        label="E-mail" valid="email" type="text" placeholder="zororomz@gmail.com"/>
         <button
           @click="mainBlock = !mainBlock"
@@ -16,15 +14,12 @@
       <section v-else>
         <h1 class="text-center">Авторизация</h1>
         <dw-input-text label="E-mail"
-                       id="signInEmail"
-                       :value="signInForm.login"
-                       @input="signInForm.login = $event"
+                       id="email"
+                       :focus="true"
                        valid="email" type="text"
                        placeholder="zororomz@gmail.com"/>
         <dw-input-text label="Пароль"
                        id="signInPassword"
-                       :value="signInForm.password"
-                       @input="signInForm.password = $event"
                        valid="password" type="password"
                        placeholder="Введите пароль..."/>
         <dw-alert v-if="error" class="top-margin">Неправильный логин или пароль</dw-alert>
@@ -43,7 +38,7 @@
     </div>
     <div class="sign-up content " v-else>
       <h1 class="text-center">Регистрация</h1>
-      <component @closeModal="close" @nextStep="nextBlock()" :sign-up-form="signUpForm" :is="mainBlock ? mainSignUp : Additional"/>
+      <component @closeModal="close" @nextStep="nextBlock()"  :is="mainBlock ? mainSignUp : Additional"/>
     </div>
   </dw-modal>
 </template>
@@ -74,22 +69,6 @@
         mainBlock: true,
         forgotPassword: false,
         mainSignUp: null,
-        signUpForm: {
-          login: '',
-          email: '',
-          password: '',
-          name: '',
-          surname: '',
-          country: '',
-          city: ''
-        },
-        signInForm: {
-          login: '',
-          password: ''
-        },
-        passwordRecoveryForm: {
-          email: '',
-        }
       }
     },
     async mounted() {
@@ -106,9 +85,6 @@
     methods: {
       dynamicComponent() {
         return this.mainBlock ? this.mainSignUp : this.Additional
-      },
-      back() {
-
       },
       open() {
         this.$emit('openModal');
