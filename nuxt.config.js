@@ -48,7 +48,11 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/svg',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    'cookie-universal-nuxt',
+
+
+    ['cookie-universal-nuxt', { alias: 'cookiz' }]
   ],
 
   auth: {

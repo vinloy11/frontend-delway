@@ -6,7 +6,10 @@
 
 <script>
   export default {
-    name: "create"
+    middleware: ['user-auth'],
+    mounted() {
+      console.log('kekek')
+    },
   }
 </script>
 

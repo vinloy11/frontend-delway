@@ -39,7 +39,8 @@
     methods: {
       endRegistration() {
         this.back();
-        this.$emit('closeModal')
+        this.$emit('closeModal');
+        this.$store.dispatch('authUser/login', {});
       },
       back() {
         this.$emit('nextStep')

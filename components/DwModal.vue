@@ -6,7 +6,7 @@
     :adaptive="adaptive"
     @before-close="beforeClose"
     @closed="closed"
-    @openModal="open()" :name="name">
+    @openModal="open()" :name="getName">
     <div class="x-icon-wrapper top-margin right-margin">
       <dw-x-icon class="x-icon icon" @click="close"/>
     </div>
@@ -37,24 +37,38 @@
       adaptive: {
         type: Boolean,
         default: false
+      },
+      name: {
+        type: String
       }
     },
     mounted() {
       this.$parent.$on('openModal', this.open);
       this.$parent.$on('closeModal', this.close);
-      this.name = (Math.random() + new Date().getTime()).toString();
+      this.$root.$on('openSignIn', this.openSignIn)
+      // this.randName = ;
     },
     data() {
       return {
-        name: ''
+        randName: (Math.random() + new Date().getTime()).toString()
+      }
+    },
+    computed: {
+      getName() {
+        return this.name ? this.name : this.randName
       }
     },
     methods: {
+      openSignIn() {
+        console.log('lel')
+        this.$modal.show('sign-in');
+      },
       open() {
-        this.$modal.show(this.name)
+        console.log(this.getName);
+        this.$modal.show(this.getName)
       },
       close() {
-        this.$modal.hide(this.name)
+        this.$modal.hide(this.getName)
       },
       beforeClose(event) {
         // await this.$store.commit('errors/removeHints');

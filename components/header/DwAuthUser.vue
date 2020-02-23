@@ -1,5 +1,5 @@
 <template>
-  <dw-modal :width="modalWidth" class="modal">
+  <dw-modal :width="modalWidth" :name="isSignIn ? 'sign-in' : ''"  class="modal">
     <div class="sign-in content" v-if="isSignIn">
       <section v-if="forgotPassword">
         <h2 class="text-center">Восстановление пароля</h2>

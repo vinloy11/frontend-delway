@@ -8,7 +8,7 @@
       </div>
       <div data-column="6" class="flex content-end right-padding-m align-items-center">
         <dw-create-project/>
-        <template v-if="$auth.loggedIn">
+        <template v-if="isAuth">
           <dw-user-inf/>
         </template>
         <template v-else>
@@ -28,17 +28,20 @@
 
   export default {
     async mounted() {
-      this.$store.commit('form/getStorage')
-      this.isAuth = await this.$store.getters['authUser/isAuthenticated'];
+      this.$store.commit('form/getStorage');
       const strategyKek = await this.$auth.strategy;
       this.user = await this.$store.dispatch('user/fetchUser');
     },
     components: {
       DwLogo, DwCreateProject, DwAuthButton, DwUserInf
     },
+    computed: {
+      isAuth() {
+        return this.$store.getters['authUser/isAuthenticated']
+      }
+    },
     data: () => {
       return {
-        isAuth: null,
         user: null,
         notifyCount: null,
         userInfo: {
