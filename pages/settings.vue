@@ -30,7 +30,7 @@
       <div data-column="9" class="content">
         <component :is="activeTabHandler">
           <section class="user">
-
+            {{ user }}
           </section>
         </component>
       </div>
