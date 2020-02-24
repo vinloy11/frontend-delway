@@ -25,7 +25,7 @@
         <dw-alert v-if="error" class="top-margin">Неправильный логин или пароль</dw-alert>
         <button
           :disabled="isValid === 1"
-          @click="error = !error"
+          @click="signIn"
           class="btn big success width-100 top-margin">Войти
         </button>
         <div class="width-100 text-center top-margin text-small semi-bold">
@@ -98,6 +98,16 @@
       goToSignUp() {
         this.$emit('goToSignUp');
         this.$store.commit('errors/removeHints');
+      },
+      async signIn() {
+        const history = this.$cookies.get('history')
+        await this.$store.dispatch('authUser/login', {});
+        if (history) {
+          this.$router.push({path: history.path});
+          this.$cookies.remove('history')
+        }
+        this.close()
+
       }
     },
   }

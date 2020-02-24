@@ -20,9 +20,8 @@
           // console.log(window.history)
           // console.log(this.$router)
           setTimeout(() => {
-            console.log(this.$store.getters['history/oldValue']);
             this.$root.$emit('openSignIn');
-          })
+          });
           console.log('Для начала войдите в систему');
           break;
         case 'logout':

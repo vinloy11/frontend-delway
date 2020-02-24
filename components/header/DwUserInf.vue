@@ -4,7 +4,16 @@
       <dw-notify/>
       <span v-if="notifyCount">{{notifyCount}}</span>
     </div>
-    <img class="pointer" width="48px" height="48px" :src="avatar" alt="">
+    <div class="image-wrapper">
+      <img class="pointer" width="48px" height="48px" :src="avatar" alt="">
+      <ul class="profile-menu">
+        <li><nuxt-link>Моя страница</nuxt-link></li>
+        <li><nuxt-link>Сообщения</nuxt-link></li>
+        <li><nuxt-link>Мои проекты</nuxt-link></li>
+        <li><nuxt-link>Настройки</nuxt-link></li>
+        <li><nuxt-link>Выйти</nuxt-link></li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -31,6 +40,19 @@
 
 <style lang="scss" scoped>
  div {
+   .image-wrapper {
+     img {
+       vertical-align: bottom;
+       border-radius: 12px;
+       transition: background-color 200ms;
+       &:hover {
+         background: var(--blue);
+       }
+       &:active {
+         background: var(--light-blue);
+       }
+     }
+   }
    .logo {
      margin: 2rem 1.5rem;
    }
@@ -44,6 +66,15 @@
    }
 
    .notify {
+     svg {
+       stroke: #3F4C67;
+       &:hover {
+         stroke: var(--blue);
+       }
+       &:active {
+         stroke: var(--light-blue);
+       }
+     }
      position: relative;
 
      span {
