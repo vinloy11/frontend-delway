@@ -8,10 +8,24 @@ const user = {
   city: 'Novosibirsk'
 };
 
+export const state = () => ({
+  user: {}
+});
+
+export const getters = {
+  user(state) {
+    return user
+  }
+};
+
+export const mutations = {
+  fetchUser(state, user) {
+    return state.user = user
+  }
+};
+
 export const actions = {
-  async fetchUser({}) {
-    return await new Promise(resolve => {
-        resolve(user)
-    })
+  async fetchUser({commit}) {
+    return commit('fetchUser', user)
   },
-}
+};

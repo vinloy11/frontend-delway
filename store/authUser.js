@@ -1,5 +1,5 @@
 export const state = () => ({
-  token: false
+  token: true
 });
 
 export const mutations = {
@@ -13,7 +13,6 @@ export const mutations = {
 
 export const actions = {
   async login({commit, dispatch, getters}, formData) {
-    console.log('lle')
     try {
       console.log(getters['isAuthenticated']);
       const token = await new Promise((resolve, reject) => {

@@ -20,7 +20,8 @@
         type: Boolean
       },
       value: {
-        type: String
+        type: String,
+        default: ''
       },
       label: {
         type: String
@@ -57,7 +58,7 @@
         this.$store.commit('form/createFieldPassword', this.$options.propsData.id);
         return
       }
-      this.$store.commit('form/createField', this.$options.propsData.id)
+      this.$store.commit('form/createField', {name: this.$options.propsData.id, value: this.$options.propsData.value})
     },
     computed: {
       userInput: {

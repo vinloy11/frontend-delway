@@ -1,5 +1,5 @@
 <template>
-  <header class="grid">
+  <header :class="['grid', isAuth ? 'auth' : '']">
     <section class="grid-row align-items-center">
       <div data-column="6">
         <nuxt-link to="/">
@@ -65,8 +65,13 @@
 
 <style lang="scss" scoped>
   header {
+    padding: 1rem 0 1rem 1.5rem;
+    background-color: var(--white);
+    &.auth {
+      padding: 0.5rem 0 0.5rem 1.5rem;
+    }
     .logo {
-      margin: 2rem 1.5rem;
+
     }
   }
 </style>

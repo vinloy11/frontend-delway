@@ -28,9 +28,9 @@ export const mutations = {
   updatedPasswordInput(state, field) {
     state.userPasswords[field.name] = field.value;
   },
-  createField(state, name) {
-    if (state.userInput[name]) return;
-    state.userInput[name] = '';
+  createField(state, field) {
+    if (state.userInput[field.name]) return;
+    state.userInput[field.name] = field.value;
   },
   createFieldPassword(state, name) {
     if (state.userPasswords[name]) return;
