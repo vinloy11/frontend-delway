@@ -1,7 +1,12 @@
 <template>
   <section class="notification">
-    Notification
-    <slot/>
+    <div class="grid">
+      <div class="grid-row">
+        <div data-column="1"></div>
+        <section data-column="10">Notification</section>
+        <div data-column="1"></div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -11,6 +16,4 @@
   }
 </script>
 
-<style scoped>
-
-</style>
+<style lang="scss" src="~/assets/style/settings/style.scss" scoped />

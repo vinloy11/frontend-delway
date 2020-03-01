@@ -1,5 +1,5 @@
 <template>
-  <section class="width-100 text-center error text-small bold height-normal">
+  <section class="width-100 text-center error  bold height-normal">
 <!--    <span v-for='(error, index) in errors' :key='index'>{{ error }}</span>-->
     {{ $store.getters['errors/ids'] }}
   </section>

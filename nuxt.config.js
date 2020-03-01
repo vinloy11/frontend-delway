@@ -32,6 +32,7 @@ export default {
     "@/plugins/vue-lazyload",
     "@/plugins/vue-js-modal",
     '@/plugins/directives.js',
+    '@/plugins/translate.js',
     '@/plugins/mask.js'
   ],
   /*

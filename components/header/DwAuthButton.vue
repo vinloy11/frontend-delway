@@ -2,7 +2,7 @@
   <div>
     <button @click="btnType === 'sign-in' ? authInit('sign-in') : authInit('sign-up')"
             :class="['btn', btnType === 'sign-in' ? 'sign-in default' : 'sign-up']">
-      <span v-html="btnType === 'sign-in' ? 'Войти' : 'Зарегестрироваться'"/>
+      <span v-html="btnType === 'sign-in' ? words.signIn : words.signUp "/>
     </button>
     <component @goToSignUp="authInit('sign-up')" :is-sign-in="isSignIn" :is="authUser"/>
   </div>
@@ -43,19 +43,14 @@
       isStart() {
         return this.state === 'start' ? 1 : 0
       },
+      words() {
+        return this.$store.getters['translate/words']
+      }
     },
     methods: {
       async authInit(method) {
-        // if (this.isStart) {
-        //   if (method === 'sign-in')
         this.isSignIn = method === 'sign-in' ? 1 :  0;
         return this.$emit('openModal');
-        // }
-        // if (this.isSignIn) {
-        //   console.log('sign in');
-        //   return
-        // }
-        // console.log('sign Up')
       },
       async authUser() {
         return import(`~/components/header/DwAuthUser.vue`)

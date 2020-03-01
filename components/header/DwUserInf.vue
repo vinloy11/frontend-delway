@@ -13,31 +13,31 @@
           <li>
             <nuxt-link class="link" to="/">
               <dw-user/>
-              Моя страница
+              {{ words.myPage }}
             </nuxt-link>
           </li>
           <li>
             <nuxt-link class="link" to="/messages">
               <dw-messages/>
-              Сообщения
+              {{ words.messages }}
             </nuxt-link>
           </li>
           <li>
             <nuxt-link class="link" to="/projects/my">
               <dw-projects/>
-              Мои проекты
+              {{ words.myProjects }}
             </nuxt-link>
           </li>
           <li>
             <nuxt-link class="link" to="/settings">
               <dw-settings/>
-              Настройки
+              {{ words.settings }}
             </nuxt-link>
           </li>
           <li>
             <a @click.prevent="logout" href="" :to="link" class="link" >
               <dw-logout/>
-              Выйти
+              {{ words.logout }}
             </a>
           </li>
         </ul>
@@ -61,7 +61,6 @@
       DwNotify, DwAvatar, DwLogout, DwMessages, DwProjects, DwSettings, DwUser
     },
     async mounted() {
-      console.log(this.$route.path)
       const that = this;
       document.documentElement.addEventListener('click', that.hideMenu);
       this.notifyCount = await this.$store
@@ -75,6 +74,9 @@
       }
     },
     computed: {
+      words() {
+        return this.$store.getters['translate/words']
+      },
       link() {
         return {
           path: this.$route.path,
@@ -121,7 +123,6 @@
         background-color: var(--dark-blue);
         white-space: nowrap;
         font-weight: 600;
-        font-size: 12px;
         position: absolute;
         right: -1rem;
 

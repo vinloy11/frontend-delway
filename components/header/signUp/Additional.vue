@@ -1,25 +1,25 @@
 <template>
   <section v-else class="additional">
     <back-arrow @click.prevent="back()" class="link absolute bold back-arrow rotate" />
-    <span class="text-small gray semi-bold inline-block width-100 text-center">Дополнительно</span>
-    <div class="title semi-bold top-margin-m bottom-padding-s">Личные данные</div>
+    <span class=" gray semi-bold inline-block width-100 text-center">{{ words.additionally }}</span>
+    <div class="title semi-bold top-margin-m bottom-padding-s">{{ words.personalData }}</div>
     <dw-input-text id="signUpName"
                    ref="signUpName"
                    :focus="true"
-                   label="Имя" type="text" placeholder="Артемий"/>
+                   :label="words.name" type="text" placeholder="Артемий"/>
     <dw-input-text id="signUpSurname"
                    ref="signUpSurname"
-                   label="Фамилия" type="text" placeholder="Лебедев"/>
-    <div class="title semi-bold top-margin-m bottom-padding-s">Контакты</div>
+                   :label="words.surname" type="text" placeholder="Лебедев"/>
+    <div class="title semi-bold top-margin-m bottom-padding-s">{{ words.contacts }}</div>
     <dw-input-text id="signUpCountry"
                    ref="signUpCountry"
-                   label="Страна" type="text" placeholder="Россия"/>
+                   :label="words.country" type="text" placeholder="Россия"/>
     <dw-input-text id="signUpCity"
                    ref="signUpCity"
-                   label="Город" type="text" placeholder="Красноярск"/>
+                   :label="words.city" type="text" placeholder="Красноярск"/>
     <button
       @click="endRegistration"
-      class="btn big  width-100 top-margin">Зарегестрироваться
+      class="btn big  width-100 top-margin">{{ words.signUp }}
     </button>
   </section>
 </template>
@@ -35,6 +35,11 @@
     },
     components: {
       DwInputText, BackArrow
+    },
+    computed: {
+      words() {
+        return this.$store.getters['translate/words']
+      }
     },
     methods: {
       endRegistration() {
@@ -56,7 +61,6 @@
       line-height: 1rem;
       color: #3F4C67;
       font-weight: 600;
-      font-size: 14px;
       border-bottom: 2px solid #ECEFF7;;
     }
   }

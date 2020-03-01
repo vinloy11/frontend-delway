@@ -1,6 +1,6 @@
 <template>
   <label class="top-margin inline-block" :style="{width: width}">
-    <div><span class="label text-small semi-bold gray">{{ label }}</span><span :class="['state', highlight ]"/></div>
+    <div><span class="label  semi-bold gray">{{ label }}</span><span :class="['state', highlight ]"/></div>
     <span class="hint semi-bold gray">{{ hint }}</span>
     <input
       :type="type"
@@ -99,7 +99,8 @@
           valid: this.valid,
           value: inputValue,
           minLength: this.minLength,
-          maxLength: this.maxLength
+          maxLength: this.maxLength,
+          words: this.$store.getters['translate/words']
         });
         if (!inputValue && !highlight) {
           validateEnd ? sendHint(this.$store, this.id, 'addHint')
@@ -140,7 +141,6 @@
       right: 0.5rem;
       margin-top: 0.7rem;
       position: absolute;
-      font-size: 12px;
       z-index: 1;
     }
 

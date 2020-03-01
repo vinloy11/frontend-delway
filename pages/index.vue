@@ -6,6 +6,9 @@
 <script>
   import Cookies from 'js-cookie'
   export default {
+    async fetch({store}) {
+      await store.dispatch('translate/translatePage');
+    },
     components: {
     },
     data() {

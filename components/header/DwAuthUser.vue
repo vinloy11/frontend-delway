@@ -1,44 +1,44 @@
 <template>
-  <dw-modal :width="modalWidth" :name="isSignIn ? 'sign-in' : ''"  class="modal">
+  <dw-modal :width="modalWidth" :name="isSignIn ? 'sign-in' : ''" class="modal">
     <div class="sign-in content" v-if="isSignIn">
       <section v-if="forgotPassword">
-        <h2 class="text-center">Восстановление пароля</h2>
-        <back-arrow @click.prevent="forgotPassword = !forgotPassword" class="link absolute bold back-arrow rotate" />
+        <h2 class="text-center">{{ words.passwordRecovery }}</h2>
+        <back-arrow @click.prevent="forgotPassword = !forgotPassword" class="link absolute bold back-arrow rotate"/>
         <dw-input-text id="email" :focus="true"
                        label="E-mail" valid="email" type="text" placeholder="zororomz@gmail.com"/>
         <button
           @click="mainBlock = !mainBlock"
-          class="btn warning big width-100 top-margin sign-up">Отправить пароль
+          class="btn warning big width-100 top-margin sign-up">{{ words.sendPassword }}
         </button>
       </section>
       <section v-else>
-        <h1 class="text-center">Авторизация</h1>
+        <h1 class="text-center">{{ words.logIn }}</h1>
         <dw-input-text label="E-mail"
                        id="email"
                        :focus="true"
                        valid="email" type="text"
-                       placeholder="zororomz@gmail.com"/>
-        <dw-input-text label="Пароль"
+                       placeholder="youremail@gmail.com"/>
+        <dw-input-text :label="words.password"
                        id="signInPassword"
                        valid="password" type="password"
-                       placeholder="Введите пароль..."/>
-        <dw-alert v-if="error" class="top-margin">Неправильный логин или пароль</dw-alert>
+                       :placeholder="`${words.enterPassword}...`"/>
+        <dw-alert v-if="error" class="top-margin">{{ words.incorrectLoginOrPassword }}</dw-alert>
         <button
           :disabled="isValid === 1"
           @click="signIn"
-          class="btn big success width-100 top-margin">Войти
+          class="btn big success width-100 top-margin">{{ words.signIn }}
         </button>
-        <div class="width-100 text-center top-margin text-small semi-bold">
-          <a @click.prevent="forgotPassword = !forgotPassword" href class="link">Забыли пароль?</a></div>
+        <div class="width-100 text-center top-margin  semi-bold">
+          <a @click.prevent="forgotPassword = !forgotPassword" href class="link">{{ words.forgotPassword }}</a></div>
         <button
           @click="goToSignUp"
-          class="btn big  width-100 top-margin sign-up">Зарегестрироваться
+          class="btn big  width-100 top-margin sign-up">{{ words.signUp }}
         </button>
       </section>
     </div>
     <div class="sign-up content " v-else>
-      <h1 class="text-center">Регистрация</h1>
-      <component @closeModal="close" @nextStep="nextBlock()"  :is="mainBlock ? mainSignUp : Additional"/>
+      <h1 class="text-center">{{ words.registration }}</h1>
+      <component @closeModal="close" @nextStep="nextBlock()" :is="mainBlock ? mainSignUp : Additional"/>
     </div>
   </dw-modal>
 </template>
@@ -48,6 +48,7 @@
   import DwAlert from "../DwAlert";
   import Additional from "./signUp/Additional";
   import BackArrow from '~/assets/svg/authButton/arrow.svg?inline';
+
   export default {
     props: {
       isSignIn: {
@@ -78,9 +79,12 @@
       this.name = (Math.random() + new Date().getTime()).toString();
     },
     computed: {
-        isValid() {
-          return this.$store.getters['errors/isValid'] ? 0 : 1
-        }
+      words() {
+        return this.$store.getters['translate/words']
+      },
+      isValid() {
+        return this.$store.getters['errors/isValid'] ? 0 : 1
+      }
     },
     methods: {
       dynamicComponent() {
@@ -103,7 +107,7 @@
         const history = this.$cookies.get('history')
         await this.$store.dispatch('authUser/login', {});
         if (history) {
-          this.$router.push({path: history.path});
+          this.$router.push({ path: history.path });
           this.$cookies.remove('history')
         }
         this.close()
@@ -111,7 +115,6 @@
       }
     },
   }
-
 
 
 </script>
@@ -125,7 +128,6 @@
         line-height: 1rem;
         color: #3F4C67;
         font-weight: 600;
-        font-size: 14px;
         border-bottom: 2px solid #ECEFF7;;
       }
     }

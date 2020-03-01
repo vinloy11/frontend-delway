@@ -10,7 +10,7 @@ export const getters = {
   ids: state => state.ids,
   isValid: state => state.isValid,
   hint: () => field => {
-    return mainValid[field.valid](field.value, field.minLength, field.maxLength)
+    return mainValid[field.valid](field.value, field.minLength, field.maxLength, field.words)
   }
 };
 
@@ -41,40 +41,44 @@ export const actions = {
 
 const mainValid = {
   hint: '',
-  name(value, minLength, maxLength) {
-    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+  name(value, minLength, maxLength, words) {
+    this.hint = this.emptyField(value, words) || this.fillInMore(value, minLength, words)
+      || this.fillLess(value, maxLength, words);
     return this.hint;
   },
-  password(value, minLength, maxLength) {
-    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+  password(value, minLength, maxLength, words) {
+    this.hint = this.emptyField(value, words) || this.fillInMore(value, minLength, words) ||
+      this.fillLess(value, maxLength, words);
     return this.hint;
   },
-  login(value, minLength, maxLength) {
-    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+  login(value, minLength, maxLength, words) {
+    this.hint = this.emptyField(value, words) || this.fillInMore(value, minLength, words)
+      || this.fillLess(value, maxLength, words);
     if (this.hint) return this.hint;
-    this.hint = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value);
-    this.hint = this.hint ? 'Только латиница и цифры' : '';
+    this.hint = regHandler(/^[a-zA-Z](.[a-zA-Z0-9_-]*)$/, value, words);
+    this.hint = this.hint ? words.onlyLatinAndNumber : '';
     return this.hint
   },
-  email(value, minLength, maxLength) {
-    this.hint = this.emptyField(value) || this.fillInMore(value, minLength) || this.fillLess(value, maxLength);
+  email(value, minLength, maxLength, words) {
+    this.hint = this.emptyField(value, words) || this.fillInMore(value, minLength, words)
+      || this.fillLess(value, maxLength, words);
     if (this.hint) return this.hint;
     this.hint = regHandler(
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      , value);
+      , value, words);
     return this.hint
   },
-  emptyField(value) {
-    return value ? '' : 'Поле не должно быть пустым'
+  emptyField(value, words) {
+    return value ? '' : words.emptyField
   },
-  fillInMore(value, minLength) {
+  fillInMore(value, minLength, words) {
     if (!minLength) return;
-    return value.length < minLength ? `Не менее ${ minLength } символов` : ''
+    return value.length < minLength ? words.minChar + minLength : ''
   },
-  fillLess(value, maxLength) {
+  fillLess(value, maxLength, words) {
     if (!maxLength) return;
-    return value.length > maxLength ? `Не более ${ maxLength } символов` : ''
+    return value.length > maxLength ? words.maxChar + maxLength : ''
   }
 };
 
-const regHandler = (reg, value) => (reg.test(value) ? '' : 'Поле заполнено неверно');
+const regHandler = (reg, value, words) => (reg.test(value) ? '' : words.invalidField);

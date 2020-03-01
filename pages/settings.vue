@@ -2,37 +2,54 @@
   <section class="settings grid">
     <div class="grid-row">
       <aside data-column="3" class="side-bar">
-        <span class="title">Аккаунт</span>
+        <span class="title">{{ words.account }}</span>
         <ul class="top-margin-s">
           <li>
-            <a @click.prevent="activeTab = 'Profile'" href=""
-               :class="['tab', activeTab === 'Profile' ? 'active' : '']">
-              <dw-settings/>
-              Профиль
+            <a @click.prevent="activeTab = tabs.profile"
+               href=""
+               :class="['tab', activeTab.page === 'Profile' ? 'active' : '']">
+              <dw-user/>
+              {{ words.profile }}
             </a>
           </li>
           <li>
-            <a @click.prevent="activeTab = 'Account'" href=""
-               :class="['tab', activeTab === 'Account' ? 'active' : '']">
-              <dw-settings/>
-              Учетные данные
+            <a @click.prevent="activeTab = tabs.account" href=""
+               :class="['tab', activeTab.page === 'Account' ? 'active' : '']">
+              <dw-account/>
+              {{ words.credentials }}
             </a>
           </li>
           <li>
-            <a @click.prevent="activeTab = 'Notifications'" href=""
-               :class="['tab', activeTab === 'Notifications' ? 'active' : '']">
-              <dw-settings/>
-              Уведомления
+            <a @click.prevent="activeTab = tabs.notifications" href=""
+               :class="['tab', activeTab.page === 'Notifications' ? 'active' : '']">
+              <dw-notifications/>
+              {{ words.notifications }}
             </a>
           </li>
         </ul>
       </aside>
       <div data-column="9" class="content">
-        <component :is="activeTabHandler">
-          <section class="user">
-            {{ user }}
-          </section>
-        </component>
+        <div class="title">{{ activeTab.title }}</div>
+        <div class="grid">
+          <div class="grid-row">
+            <div data-column="1"></div>
+            <section data-column="10" class="user top-margin flex">
+              <div>
+                <!--                <h1>ПРИВЕТ как еелажа</h1>-->
+                <img ref="avatar" width="64px"
+                     height="64px" :src="avatar" alt="">
+              </div>
+              <div class="left-margin flex column space-around bold">
+                <span class="block  black">{{ `${user.name} ${user.lastName}` }}</span>
+                <a v-dw-active="" class="block link text-small" @click.prevent="changePhoto" href="">{{
+                  words.changePhoto }}</a>
+              </div>
+              <!--            {{ user }}-->
+            </section>
+            <div data-column="1"></div>
+          </div>
+        </div>
+        <component :user="user" :is="activeTabHandler"/>
       </div>
     </div>
   </section>
@@ -40,14 +57,25 @@
 
 <script>
   import DwSettings from '~/assets/svg/user/settings.svg?inline';
+  import DwAvatar from '~/assets/svg/user/avatar.svg?raw';
+  import DwUser from '~/assets/svg/user/user.svg?inline';
+  import DwAccount from '~/assets/svg/settings/account.svg?inline';
+  import DwNotifications from '~/assets/svg/settings/notifications.svg?inline';
 
   export default {
     middleware: ['user-auth'],
-    components: { DwSettings },
-    async fetch({store}) {
+    components: { DwSettings, DwAvatar, DwUser, DwAccount, DwNotifications },
+    async fetch({ store, app }) {
+      await store.dispatch('translate/translatePage');
+      await store.dispatch('translate/fetchLanguage');
       await store.dispatch('user/fetchUser');
     },
-    mounted() {
+    created() {
+      // this.$store.commit('translate/setLanguage')
+      if (this.$route.query.tab) {
+        if (!this.tabs[this.$route.query.tab]) return;
+        this.activeTab = this.tabs[this.$route.query.tab]
+      }
       this.Account = () => import(`~/components/settings/Account.vue`);
       this.Notifications = () => import(`~/components/settings/Notifications.vue`);
       this.Profile = () => import(`~/components/settings/Profile.vue`);
@@ -57,15 +85,50 @@
         Account: null,
         Notifications: null,
         Profile: null,
-        activeTab: 'Profile',
+        avatar: DwAvatar,
+        activeTab: { page: 'Profile', title: this.getWords().profile },
+      }
+    },
+    watch: {
+      activeTab() {
+        const newTab = this.activeTab.page.toLowerCase();
+        history.pushState(null, null, `/settings?tab=${ newTab }`);
+      }
+    },
+    methods: {
+      changePhoto() {
+        console.log('kek')
+      },
+      getWords() {
+        return this.$store.getters['translate/words']
+
       }
     },
     computed: {
+      tabs() {
+        return {
+          profile: {
+            title: this.words.profile,
+            page: 'Profile'
+          },
+          account: {
+            title: this.words.credentials,
+            page: 'Account'
+          },
+          notifications: {
+            title: this.words.profile,
+            page: 'Notifications'
+          }
+        }
+      },
+      words() {
+        return this.$store.getters['translate/words']
+      },
       user() {
         return this.$store.getters['user/user']
       },
       activeTabHandler() {
-        return this[this.activeTab]
+        return this[this.activeTab.page]
       }
     }
 
@@ -73,6 +136,7 @@
 </script>
 
 <style lang="scss" scoped>
+
   .settings {
     .side-bar {
       background: var(--white);
@@ -96,14 +160,13 @@
         align-items: center;
         cursor: pointer;
         padding: 8px;
-        font-size: 14px;
         font-weight: 600;
         color: var(--black);
         outline: none;
 
         svg {
-          height: 24px;
-          width: 24px;
+          height: 1.5em;
+          width: 1.5em;
           stroke: var(--dark-blue);
           margin-right: 1.5rem;
         }
@@ -132,6 +195,31 @@
       background: var(--white);
       width: 100%;
       height: 70vh;
+
+      .title {
+        font-weight: 600;
+        padding: 13.5px 0 13px 8px;
+        border-bottom: 2px solid #ECEFF7;
+      }
+
+      .user {
+        padding-bottom: 18px;
+        border-bottom: 1px solid #ECEFF7;
+
+        .link {
+          color: #2D9CDB;
+          transform: scale(1);
+
+          &:hover, &:focus {
+            color: var(--blue);
+          }
+
+          &:active, &.active {
+            transform: scale(0.98);
+            color: var(--light-blue);
+          }
+        }
+      }
     }
   }
 </style>

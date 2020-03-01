@@ -1,8 +1,8 @@
 <template>
   <section class="main">
-    <div class="title semi-bold top-margin-m bottom-padding-s">Аккаунт</div>
+    <div class="title semi-bold top-margin-m bottom-padding-s">{{ words.account }}</div>
     <dw-input-text id="signUpLogin"
-                   label="Логин"
+                   :label="words.login"
                    :focus="true"
                    :min-length="2"
                    valid="login"
@@ -15,12 +15,12 @@
                    placeholder="zororomz@gmail.com"/>
     <dw-input-text id="signUpPassword"
                    :min-length="6"
-                   label="Пароль" valid="password" type="password" placeholder="Введите пароль..."/>
+                   :label="words.password" valid="password" type="password" placeholder="Введите пароль..."/>
     <dw-alert class="top-margin"/>
     <button
       :disabled="isValid === 1"
       @click="nextStep"
-      class="btn big success width-100 top-margin">Продолжить регистрацию
+      class="btn big success width-100 top-margin">{{ words.continueRegistration }}
     </button>
   </section>
 </template>
@@ -38,6 +38,9 @@
       DwInputText, DwAlert
     },
     computed: {
+      words() {
+        return this.$store.getters['translate/words']
+      },
       isValid() {
         return this.$store.getters['errors/isValid'] ? 0 : 1
       }
@@ -58,7 +61,6 @@
       line-height: 1rem;
       color: #3F4C67;
       font-weight: 600;
-      font-size: 14px;
       border-bottom: 2px solid #ECEFF7;;
     }
   }

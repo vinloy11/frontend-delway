@@ -5,6 +5,12 @@
         <nuxt-link to="/">
           <dw-logo class="logo"/>
         </nuxt-link>
+        <select v-model="asa">
+          <option disabled value="">Язык</option>
+          <option>en</option>
+          <option>ru</option>
+          <option>fr</option>
+        </select>
       </div>
       <div data-column="6" class="flex content-end right-padding-m align-items-center">
         <dw-create-project/>
@@ -27,14 +33,20 @@
   import DwUserInf from "./header/DwUserInf";
 
   export default {
+    components: {
+      DwLogo, DwCreateProject, DwAuthButton, DwUserInf
+    },
+
+    beforeCreate() {
+      // this.$store.dispatch('translate/translatePage');
+    },
+
     async mounted() {
       this.$store.commit('form/getStorage');
       const strategyKek = await this.$auth.strategy;
       this.user = await this.$store.dispatch('user/fetchUser');
     },
-    components: {
-      DwLogo, DwCreateProject, DwAuthButton, DwUserInf
-    },
+
     computed: {
       isAuth() {
         return this.$store.getters['authUser/isAuthenticated']
@@ -42,12 +54,23 @@
     },
     data: () => {
       return {
+        asa: '',
         user: null,
         notifyCount: null,
         userInfo: {
           login: 'delayed',
           password: 'qwertY1$',
         }
+      }
+    },
+    watch: {
+      asa() {
+        this.$cookies.set('selectLang', JSON.stringify(this.asa), {
+          path: '/',
+          maxAge: 60 * 60
+        });
+        this.$store.commit('translate/toggleTranslated');
+        this.$store.dispatch('translate/translatePage');
       }
     },
     methods: {
