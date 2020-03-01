@@ -11,7 +11,7 @@ export const words = {
   messages: 'Сообщения',
   myProjects: 'Мои проекты',
   logout: 'Выйти',
-  signIn: 'Вход',
+  signIn: 'Войти',
   logIn: 'Авторизация',
   login: 'Логин',
   signUp: 'Зарегистрироваться',

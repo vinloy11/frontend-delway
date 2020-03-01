@@ -1,7 +1,7 @@
 <template>
   <label class="top-margin inline-block" :style="{width: width}">
-    <div><span class="label  semi-bold gray">{{ label }}</span><span :class="['state', highlight ]"/></div>
-    <span class="hint semi-bold gray">{{ hint }}</span>
+    <div><span class="label  semi-bold gray">{{ label }}</span><span :class="['text-big','state', highlight ]"/></div>
+    <span class="hint semi-bold gray text-small">{{ hint }}</span>
     <input
       :type="type"
       @blur="validate"

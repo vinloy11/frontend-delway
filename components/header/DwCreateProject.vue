@@ -1,6 +1,6 @@
 <template>
   <a ref="link" @click.prevent="createProject()" href="/projects/create" class="btn right-margin-m">
-    <span>{{ words.createProject }}</span>
+    <span >{{ words.createProject }}</span>
     <span class="left-margin-s plus">&#43;</span>
   </a>
 </template>
@@ -38,6 +38,9 @@
 </script>
 
 <style lang="scss" scoped>
+  a {
+    font-size: 0.8rem;
+  }
   .plus {
     vertical-align: middle;
     font-size: 15px;

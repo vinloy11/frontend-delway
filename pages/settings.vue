@@ -198,7 +198,7 @@
 
       .title {
         font-weight: 600;
-        padding: 13.5px 0 13px 8px;
+        padding: 12px 0 12px 8px;
         border-bottom: 2px solid #ECEFF7;
       }
 

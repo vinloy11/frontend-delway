@@ -13,7 +13,6 @@ button {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  font-size: 0.75rem;
 }
 .btn {
   font-family: 'Montserrat', sans-serif;
@@ -26,7 +25,7 @@ button {
   -webkit-appearance: none;
   text-align: center;
   box-sizing: border-box;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   outline: none;
   max-height: 2rem;
   margin: 0;
@@ -36,8 +35,7 @@ button {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  padding: 0.5em 1em 0.7em 1em;
-  font-size: 0.75rem;
+  padding: 0.5em 1em 0.5em 1em;
   span {
     line-height: 1rem;
   }
@@ -50,6 +48,7 @@ button {
     transform: scale(0.95);
   }
   &.big {
+    font-size: 0.875rem;
     padding: 1rem;
     max-height: 3rem;
   }

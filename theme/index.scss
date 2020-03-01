@@ -1,114 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');
-/// poly-fluid-sizing
-/// Generate linear interpolated size values through multiple break points
-/// @param $property - A string CSS property name
-/// @param $map - A Sass map of viewport unit and size value pairs
-/// @requires function linear-interpolation
-/// @requires function map-sort
-/// @example
-///   @include poly-fluid-sizing('font-size', (576px: 22px, 768px: 24px, 992px: 34px));
-/// @author Jake Wilson <jake.e.wilson@gmail.com>
-@function map-sort-by-values($map) {
-  // Transform map to zipped list
-  $keys: ();
-  $values: ();
-
-  @each $key, $val in $map {
-    $keys: append($keys, $key);
-    $values: append($values, $val);
-  }
-
-  $list: zip($keys, $values);
-
-  $sortedMap: ();
-  @while length($list) > 0 {
-
-    // Find smallest pair
-    $smallestPair: nth($list, 1);
-    @each $pair in $list {
-      $value: nth($pair, 2);
-      $smallestValue: nth($smallestPair, 2);
-      @if $value < $smallestValue {
-        $smallestPair: $pair;
-      }
-    }
-
-    // Add smallest pair to sorted map
-    $key: nth($smallestPair, 1);
-    $value: nth($smallestPair, 2);
-    $sortedMap: map-merge($sortedMap, ($key: $value));
-
-    // Remove from list smallest pair
-    $smallestPairIndex: index($list, $smallestPair);
-    $newList: ();
-    @for $i from 1 through length($list) {
-      @if $i != $smallestPairIndex {
-        $newList: append($newList, nth($list, $i), "space");
-      }
-    }
-    $list: $newList;
-  }
-
-  @return $sortedMap;
-}
-@mixin poly-fluid-sizing($property, $map) {
-  // Get the number of provided breakpoints
-  $length: length(map-keys($map));
-
-  // Error if the number of breakpoints is < 2
-  @if ($length < 2) {
-    @error "poly-fluid-sizing() $map requires at least values"
-  }
-
-  // Sort the map by viewport width (key)
-  $map: map-sort-by-values($map);
-  $keys: map-keys($map);
-
-  // Minimum size
-  #{$property}: map-get($map, nth($keys,1));
-
-  // Interpolated size through breakpoints
-  @for $i from 1 through ($length - 1) {
-    @media (min-width:nth($keys,$i)) {
-      $value1: map-get($map, nth($keys,$i));
-      $value2: map-get($map, nth($keys,($i + 1)));
-      // If values are not equal, perform linear interpolation
-      @if ($value1 != $value2) {
-        #{$property}: linear-interpolation((nth($keys,$i): $value1, nth($keys,($i+1)): $value2));
-      } @else {
-        #{$property}: $value1;
-      }
-    }
-  }
-
-  // Maxmimum size
-  @media (min-width:nth($keys,$length)) {
-    #{$property}: map-get($map, nth($keys,$length));
-  }
-}
-
-
-
-@function linear-interpolation($map) {
-  $keys: map-keys($map);
-  @if (length($keys) != 2) {
-    @error "linear-interpolation() $map must be exactly 2 values";
-  }
-  // The slope
-  $m: (map-get($map, nth($keys, 2)) - map-get($map, nth($keys, 1)))/(nth($keys, 2) - nth($keys,1));
-
-  // The y-intercept
-  $b: map-get($map, nth($keys, 1)) - $m * nth($keys, 1);
-
-  // Determine if the sign should be positive or negative
-  $sign: "+";
-  @if ($b < 0) {
-    $sign: "-";
-    $b: abs($b);
-  }
-
-  @return calc(#{$m*100}vw #{$sign} #{$b});
-}
 
 :root {
   --dark-green: #3EB13C;
@@ -142,42 +32,30 @@ html {
   box-sizing: border-box;
 
   body {
-    @include poly-fluid-sizing('font-size', (320px: 12px, 576px: 14px, 768px: 14.5px, 992px: 14px, 1280px: 14px, 1600px: 16px));
+    font-size: 0.875rem;
     color: var(--black);
     margin: 0 auto;
     background-color: var(--background);
   }
 
   .text-small {
-    @include poly-fluid-sizing('font-size', (320px: 12px, 576px: 12px, 768px: 12.5px, 992px: 13px, 1280px: 12px));
+    font-size: 0.75rem;
   }
 
-  //h1 {
-  //
-  //  font-size: 2rem;
-  //  line-height: 2.5rem;
-  //
-  //}
+  .text-normal {
+    font-size: 0.875rem;
+  }
+
+  .text-big {
+    font-size: 1rem;
+  }
 
   h1 {
     // Minimum font-size
     color: var(--dark-blue);
-    font-size: 22px;
+    font-size: 2rem;
+    line-height: 2.5rem;
     font-weight: bold;
-    // Font-size between 576 - 768
-    @media (min-width:576px) {
-      $map: (576px: 22px, 768px: 24px);
-      font-size: linear-interpolation($map);
-    }
-    // Font-size between 768 - 992
-    @media (min-width:768px) {
-      $map: (768px: 24px, 992px: 34px);
-      font-size: linear-interpolation($map);
-    }
-    // Maximum font-size
-    @media (min-width:992px) {
-      font-size: 34px;
-    }
   }
 
   h2 {

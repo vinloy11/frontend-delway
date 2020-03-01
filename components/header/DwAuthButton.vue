@@ -61,6 +61,7 @@
 
 <style lang="scss" scoped>
   button {
+    font-size: 0.8rem;
     &.sign-up:after {
       content: 'd';
       color: transparent;
