@@ -41,8 +41,12 @@
               </div>
               <div class="left-margin flex column space-around bold">
                 <span class="block  black">{{ `${user.name} ${user.lastName}` }}</span>
-                <a v-dw-active="" class="block link text-small" @click.prevent="changePhoto" href="">{{
-                  words.changePhoto }}</a>
+                <form ref="imageForm" action="http://localhost:3000/" method="post">
+                  <input @change="changeFile" ref="uploadFile" hidden type="file">
+                  <label for=""></label>
+                  <a v-dw-active="" class="block link text-small" @click.prevent="changePhoto" href="">
+                    {{ words.changePhoto }}</a>
+                </form>
               </div>
               <!--            {{ user }}-->
             </section>
@@ -86,6 +90,7 @@
         Notifications: null,
         Profile: null,
         avatar: DwAvatar,
+        newImage: '',
         activeTab: { page: 'Profile', title: this.getWords().profile },
       }
     },
@@ -97,11 +102,35 @@
     },
     methods: {
       changePhoto() {
+        this.$refs.uploadFile.click();
         console.log('kek')
+      },
+      changeFile(e) {
+        if (!e.target.files[0]) return;
+        this.newImage = e.target.files[0];
+        const fr = new FileReader();
+        fr.addEventListener("load", () => this.showImage(fr));
+        fr.readAsDataURL(e.target.files[0]);
+      },
+      async showImage(fr)  {
+        const formData = new FormData();
+        formData.append('file', this.file);
+        try {
+          await this.$axios.post('/uploadFileUrl',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }
+          );
+          this.$refs.avatar.src = fr.result;
+        } catch (e) {
+          console.error(e);
+        }
       },
       getWords() {
         return this.$store.getters['translate/words']
-
       }
     },
     computed: {
@@ -205,6 +234,10 @@
       .user {
         padding-bottom: 18px;
         border-bottom: 1px solid #ECEFF7;
+
+        img {
+          border-radius: 50%;
+        }
 
         .link {
           color: #2D9CDB;
